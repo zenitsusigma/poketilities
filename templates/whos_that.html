@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} - Who's That Pokemon?{% endblock %}
+
+{% block content %}
+<h1>Who's That Pokémon?</h1>
+
+<div class="whos-that-game" id="game-area">
+    <div class="gen-select">
+        {% for gen_key in generations.keys() %}
+            <button type="button" class="gen-btn {{ 'active' if gen_key == '1' else '' }}" data-gen="{{ gen_key }}">Gen {{ gen_key }}</button>
+        {% endfor %}
+    </div>
+
+    <div class="difficulty-select">
+        <button type="button" class="diff-btn active" data-diff="easy">Easy</button>
+        <button type="button" class="diff-btn" data-diff="normal">Normal</button>
+        <button type="button" class="diff-btn" data-diff="hard">Hard</button>
+    </div>
+
+    <div class="pokemon-stage">
+        <img id="pokemon-sprite" src="" alt="Mystery Pokemon" class="silhouette">
+    </div>
+
+    <p id="timer" class="timer"></p>
+
+    <div id="guess-display" class="guess-display"></div>
+    <p id="hint" class="hint"></p>
+
+    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="off" spellcheck="false">
+
+    <p id="feedback"></p>
+
+    <div class="game-controls">
+        <button id="reveal-btn" type="button">Give Up (Esc)</button>
+        <button id="next-btn" type="button" style="display: none;">Next Pokémon (Enter)</button>
+    </div>
+
+    <div class="score-row">
+        <p>Score: <span id="score-value">0</span></p>
+        <p>Streak: <span id="streak-value">0</span></p>
+        <p>Best streak: <span id="best-streak-value">0</span></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const WHOS_THAT_SETTINGS = {{ whos_that_settings | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/whos-that.js') }}"></script>
+{% endblock %}

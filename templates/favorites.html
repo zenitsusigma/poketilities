@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} - Favorites{% endblock %}
+
+{% block content %}
+<h1>My Favorites</h1>
+<div>
+    {% for mon in favorites %}
+        <article class="favorite-card">
+            <h2>{{ mon.name }}</h2>
+            <img src="{{ mon.image_url }}" alt="{{ mon.name }}">
+            <p>{{ mon.blurb}}</p>
+            <div class="video-embed">
+                <iframe src="https://www.youtube.com/embed/{{ mon.video_id }}" allowfullscreen></iframe>
+            </div>
+        </article>
+    {% endfor %}
+</div>
+{% endblock %}
