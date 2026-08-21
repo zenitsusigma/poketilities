@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} - Multiplayer{% endblock %}
+
+{% block content %}
+<h1>Multiplayer</h1>
+
+{% if error %}
+<p class="error-text">{{ error }}</p>
+{% endif %}
+
+<div class="mp-panels">
+    <div class="mp-panel">
+        <h2>Create a Room</h2>
+        <form action="{{ url_for('multiplayer_create') }}" method="post">
+            <input type="text" name="name" placeholder="Your name" maxlength="20" required>
+            <fieldset>
+                <legend>Difficulty</legend>
+                <label><input type="radio" name="difficulty" value="easy" checked> Easy</label>
+                <label><input type="radio" name="difficulty" value="normal"> Normal</label>
+                <label><input type="radio" name="difficulty" value="hard"> Hard</label>
+            </fieldset>
+            <fieldset>
+                <legend>Generations</legend>
+                {% for gen_key in generations.keys() %}
+                    <label><input type="checkbox" name="gens" value="{{ gen_key }}" {{ 'checked' if gen_key == '1' else '' }}> Gen {{ gen_key }}</label>
+                {% endfor %}
+            </fieldset>
+            <button type="submit">Create Room</button>
+        </form>
+    </div>
+
+    <div class="mp-panel">
+        <h2>Join a Room</h2>
+        <form action="{{ url_for('multiplayer_join') }}" method="post">
+            <input type="text" name="name" placeholder="Your name" maxlength="20" required>
+            <input type="text" name="code" placeholder="Room code" maxlength="4" style="text-transform: uppercase;" required>
+            <button type="submit">Join Room</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

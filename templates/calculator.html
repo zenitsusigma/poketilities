@@ -1,7 +1,56 @@
 {% extends "base.html" %}
-{% block title %}{{ site_name }} - Calculator{% endblock %}
+{% block title %}{{ site_name }} - Type Calculator{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/calculator.css') }}">
+{% endblock%}
 
 {% block content %}
-<h1>Calculator</h1>
-<!-- logic goes here next session -->
+<div class="calc-page">
+    <h1 class="calc-title">Type Effectiveness Calculator</h1>
+    <p class="calc-subtitle">Pick 1 or 2 types to see effectiveness
+
+    <div class="calc-picker">
+        <div class="calc-picker-label">Type 1</div>
+        <div class="calc-type-grid" id="type1-grid"></div>
+    </div>
+
+    <div class="calc-picker">
+        <div class="calc-picker-label">Type 2</div>
+        <div class="calc-type-grid" id="type2-grid"></div>
+    </div>
+
+    <div class="calc-results" id="calc-results" style="display: none;">
+        <div class="calc-result-group calc-result-group--4x">
+            <h2>4&times; Weak To</h2>
+            <div class="calc-chip-row" id="weak-4x"></div>
+        </div>
+        <div class="calc-result-group calc-result-group--2x">
+            <h2>2&times; Weak To</h2>
+            <div class="calc-chip-row" id="weak-2x"></div>
+        </div>
+        <div class="calc-result-group calc-result-group--half">
+            <h2>&frac12; Resists</h2>
+            <div class="calc-chip-row" id="resist-half"></div>
+        </div>
+        <div class="calc-result-group calc-result-group--quarter">
+            <h2>&frac14; Resists</h2>
+            <div class="calc-chip-row" id="resist-quarter"></div>
+        </div>
+        <div class="calc-result-group calc-result-group--immune">
+            <h2>&frac14; Resists</h2>
+            <div class="calc-chip-row" id="immune"></div>
+        </div>
+    </div>
+
+    <p class="calc-placeholder" id="calc-placeholder">Pick a type above to get started</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const TYPE_CHART = {{ type_chart | tojson }};
+    const TYPE_COLORS = {{ type_colors | tojson }};
+</script>
+<script src="{{ url_for('static', filename="js/calculator.js") }}"></script>
 {% endblock %}

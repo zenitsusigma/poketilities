@@ -1,51 +1,144 @@
 {% extends "base.html" %}
 {% block title %}{{ site_name }} - Who's That Pokemon?{% endblock %}
 
+{% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/whos-that.css') }}">
+{% endblock %}
+
 {% block content %}
-<h1>Who's That Pokémon?</h1>
+<div class="wt-page" id="game-area">
 
-<div class="whos-that-game" id="game-area">
-    <div class="gen-select">
-        {% for gen_key in generations.keys() %}
-            <button type="button" class="gen-btn {{ 'active' if gen_key == '1' else '' }}" data-gen="{{ gen_key }}">Gen {{ gen_key }}</button>
-        {% endfor %}
+    <div class="wt-topbar">
+        <div class="wt-score-badge">
+            <span class="wt-score-label">Score</span>
+            <span class="wt-score-value" id="score-value">0</span>
+        </div>
+        <div class="wt-topbar-right">
+            <div class="wt-lives" id="lives-container" aria-label="Lives remaining">
+                {% for i in range(whos_that_settings.livesCount) %}
+                    <span class="wt-life" data-life>&#9829;</span>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
-    <div class="difficulty-select">
-        <button type="button" class="diff-btn active" data-diff="easy">Easy</button>
-        <button type="button" class="diff-btn" data-diff="normal">Normal</button>
-        <button type="button" class="diff-btn" data-diff="hard">Hard</button>
+    <h1 class="wt-title">
+        Who's That<br>
+        <span class="wt-title-highlight">Pok&eacute;mon?</span>
+    </h1>
+
+    <div class="wt-diffrow">
+        <button type="button" class="wt-diff-btn active" data-diff="easy">Easy</button>
+        <button type="button" class="wt-diff-btn" data-diff="normal">Normal</button>
+        <button type="button" class="wt-diff-btn" data-diff="hard">Hard</button>
+    </div>
+    <p class="wt-diff-caption" id="diff-caption">Easy: full colour sprite, hint kicks in after a few misses.</p>
+
+    <div class="wt-filters">
+        <div class="wt-filters-row">
+            <span class="wt-filters-label">Filters</span>
+            <label class="wt-toggle-label">
+                <span>Mega Evolutions</span>
+                <span class="wt-toggle">
+                    <input type="checkbox" id="mega-toggle">
+                    <span class="wt-toggle-track"></span>
+                </span>
+            </label>
+            <label class="wt-toggle-label">
+                <span>Regional Forms</span>
+                <span class="wt-toggle">
+                    <input type="checkbox" id="regional-toggle">
+                    <span class="wt-toggle-track"></span>
+                </span>
+            </label>
+        </div>
+        <div class="wt-gens">
+            <span class="wt-filters-label">Generations</span>
+            <div class="wt-gen-grid" id="gen-selectors">
+                <button type="button" class="wt-gen-btn" id="all-gen-btn" data-gen="all">All</button>
+                {% for gen_key in generations.keys() %}
+                    <button type="button" class="wt-gen-btn {{ 'active' if gen_key == '1' else '' }}" data-gen="{{ gen_key }}">{{ gen_key }}</button>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
-    <div class="pokemon-stage">
-        <img id="pokemon-sprite" src="" alt="Mystery Pokemon" class="silhouette">
+    <div class="wt-layout">
+        <div class="wt-tools">
+            <button type="button" class="wt-tool-btn" id="hint-btn" title="Reveal a letter">Hint</button>
+            <button type="button" class="wt-tool-btn" id="skip-btn" title="Skip this one">Skip</button>
+        </div>
+
+        <div class="wt-main">
+            <div class="wt-stage" id="silhouette-container">
+                <img id="pokemon-sprite" src="" alt="Mystery Pokemon" style="display: none;">
+                <div class="wt-loading" id="loading-indicator">LOADING&hellip;</div>
+                <div class="wt-timer-track">
+                    <div class="wt-timer-bar" id="timer-bar"></div>
+                </div>
+            </div>
+
+            <div class="wt-typebar" id="typing-area">
+                <span id="guess-display" class="wt-guess"></span>
+                <div class="wt-pause-overlay" id="pause-overlay" style="display: none;">
+                    <span>PAUSED - press ESC to resume</span>
+                </div>
+            </div>
+            <p class="wt-typebar-caption">Type to solve &bull; Ctrl+Delete to clear &bull; Esc to pause</p>
+
+            <p id="hint" class="wt-hint"></p>
+            <p id="feedback" class="wt-feedback"></p>
+            <button type="button" id="play-again-btn" class="wt-tool-btn wt-tool-btn--wide" style="display: none;">Play Again</button>
+
+            <div class="wt-score-row">
+                <p>Streak <span id="streak-value">0</span></p>
+                <p>Best <span id="best-streak-value">0</span></p>
+            </div>
+
+            <input type="text" id="hidden-input" class="wt-hidden-input" autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>
+
+        <div class="wt-sidebar">
+            <div class="wt-sidebar-header">
+                <h2>Latest Guesses</h2>
+                <div class="wt-sidebar-links">
+                    <button type="button" id="leaderboard-btn">Leaderboard</button>
+                    <button type="button" id="expand-history-btn">Expand</button>
+                </div>
+            </div>
+            <ul class="wt-history-list" id="history-list"></ul>
+        </div>
     </div>
 
-    <p id="timer" class="timer"></p>
-
-    <div id="guess-display" class="guess-display"></div>
-    <p id="hint" class="hint"></p>
-
-    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="off" spellcheck="false">
-
-    <p id="feedback"></p>
-
-    <div class="game-controls">
-        <button id="reveal-btn" type="button">Give Up (Esc)</button>
-        <button id="next-btn" type="button" style="display: none;">Next Pokémon (Enter)</button>
+    <div class="wt-modal" id="history-modal">
+        <div class="wt-modal-card">
+            <div class="wt-modal-header">
+                <h2>Guess History</h2>
+                <button type="button" class="wt-modal-close" id="close-history-btn" aria-label="Close">&times;</button>
+            </div>
+            <ul class="wt-history-list wt-history-list--modal" id="full-history-list"></ul>
+        </div>
     </div>
 
-    <div class="score-row">
-        <p>Score: <span id="score-value">0</span></p>
-        <p>Streak: <span id="streak-value">0</span></p>
-        <p>Best streak: <span id="best-streak-value">0</span></p>
+    <div class="wt-modal" id="leaderboard-modal">
+        <div class="wt-modal-card">
+            <div class="wt-modal-header">
+                <h2>Local Leaderboard</h2>
+                <button type="button" class="wt-modal-close" id="close-leaderboard-btn" aria-label="Close">&times;</button>
+            </div>
+            <p class="wt-modal-note">Best runs saved on this browser. A synced, site-wide leaderboard needs a database &mdash; next up.</p>
+            <ul class="wt-history-list wt-history-list--modal" id="leaderboard-list"></ul>
+        </div>
     </div>
+
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
     const WHOS_THAT_SETTINGS = {{ whos_that_settings | tojson }};
+    const GENERATION_KEYS = {{ generations.keys() | list | tojson }};
 </script>
 <script src="{{ url_for('static', filename='js/whos-that.js') }}"></script>
 {% endblock %}
