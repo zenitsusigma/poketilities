@@ -3,7 +3,7 @@ import string
 import requests
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room, emit
-from config import SITE_NAME, MY_NAME, TAGLINE, NAV_LINKS, THEME, FAVORITES, GENERATIONS, WHOS_THAT_SETTINGS, MEGA_EVOLUTIONS, REGIONAL_FORMS, TYPE_CHART, TYPE_COLORS
+from config import SITE_NAME, MY_NAME, TAGLINE, NAV_LINKS, THEME, FAVORITES, GENERATIONS, WHOS_THAT_SETTINGS, MEGA_EVOLUTIONS, REGIONAL_FORMS, TYPE_CHART, TYPE_COLORS, QUIZ_QUESTIONS
 
 app = Flask(__name__)
 
@@ -67,7 +67,7 @@ def pokedex_game():
 
 @app.route("/quiz")
 def quiz():
-    return render_template("quiz.html")
+    return render_template("quiz.html", questions=QUIZ_QUESTIONS)
 
 @app.route("/favorites")
 def favorites():    

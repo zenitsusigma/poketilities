@@ -121,3 +121,21 @@ TYPE_COLORS = {
     "rock": "#B8A038", "ghost": "#705898", "dragon": "#7038F8", "dark": "#705848",
     "steel": "#B8B8D0", "fairy": "#EE99AC",
 }
+
+QUIZ_QUESTIONS = [
+    {"question": "What type is Pikachu?", "options": ["Normal", "Electric", "Fairy", "Psychic"], "correct": 1},
+    {"question": "What is Charizard's second type?", "options": ["Dragon", "Ground", "Flying", "Rock"], "correct": 2},
+    {"question": "Which stat does the item Choice Scarf boost the use of?", "options": ["Attack", "Speed", "Defense", "HP"], "correct": 1},
+    {"question": "What move does a Pokemon use to learn from an Egg passed down by its parents?", "options": ["TM Move", "Egg Move", "Tutor Move", "Level-up Move"], "correct": 1},
+    {"question": "Which of these types resists Ghost-type moves?", "options": ["Psychic", "Normal", "Dark", "Ghost"], "correct": 2},
+    {"question": "What is the maximum possible IV value for a single stat?", "options": ["31", "100", "252", "6"], "correct": 0},
+    {"question": "Which Pokemon is known as the Pseudo-Legendary of Kanto?", "options": ["Snorlax", "Dragonite", "Gyarados", "Tyranitar"], "correct": 1},
+    {"question": "What status condition prevents a Pokemon from using moves besides Struggle?", "options": ["Paralysis", "Confusion", "Full Restore", "Disable"], "correct": 3},
+    {"question": "Which type of berry cures poison?", "options": ["Cheri Berry", "Pecha Berry", "Rawst Berry", "Chesto Berry"], "correct": 1},
+    {"question": "How many badges are needed to enter the Pokemon League in a typical region?", "options": ["4", "6", "8", "12"], "correct": 2},
+    {"question": "What is Eevee's evolution that requires a Water Stone?", "options": ["Jolteon", "Flareon", "Vaporeon", "Umbreon"], "correct": 2},
+    {"question": "Which move has a base power that's always exactly enough to knock out the target?", "options": ["Guillotine", "False Swipe", "Explosion", "Self-Destruct"], "correct": 0},
+    {"question": "What ability prevents a Pokemon from being statused by weather-related conditions like Sandstorm damage?", "options": ["Sand Veil", "Sand Force", "Sand Rush", "Magic Guard"], "correct": 3},
+    {"question": "Which region introduced the Fairy type?", "options": ["Sinnoh", "Unova", "Kalos", "Alola"], "correct": 2},
+    {"question": "What happens to a move's power when it's super effective?", "options": ["x1.5", "x2", "x3", "No change"], "correct": 1},
+]

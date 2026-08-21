@@ -1,7 +1,43 @@
 {% extends "base.html" %}
 {% block title %}{{ site_name }} - Quiz{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+{% endblock %}
+
 {% block content %}
-<h1>Quiz</h1>
-<!-- logic goes here next session -->
+<div class="quiz-page">
+    <h1 class="quiz-title">Pokemon Quiz</h1>
+
+    <div id="quiz-intro" class="quiz-intro">
+        <p>{{ questions|length }} questions, one shot each. How much do you actually know?</p>
+        <button type="button" id="start-quiz-btn" class="quiz-btn quiz-btn--primary">Start Quiz</button>
+    </div>
+
+    <div id="quiz-active" class="quiz-active" style="display: none;">
+        <div class="quiz-progress">
+            <span id="quiz-progress-text">Question 1 / {{ questions|length }}</span>
+            <span id="quiz-score-text">Score: 0</span>
+        </div>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress-fill"></div></div>
+
+        <p class="quiz-question" id="quiz-question"></p>
+        <div class="quiz-options" id="quiz-options"></div>
+
+        <button type="button" id="quiz-next-btn" class="quiz-btn quiz-btn--primary" style="display: none;">Next Question</button>
+    </div>
+
+    <div id="quiz-results" class="quiz-results" style="display: none;">
+        <h2 id="quiz-final-score"></h2>
+        <p id="quiz-final-message"></p>
+        <button type="button" id="quiz-restart-btn" class="quiz-btn quiz-btn--primary">Play Again</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const QUIZ_QUESTIONS = {{ questions | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
 {% endblock %}
