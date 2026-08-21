@@ -1,7 +1,47 @@
 {% extends "base.html" %}
-{% block title %}{{ site_name }} - PokeDLE{% endblock %}
+{% block title %}{{ site_name }} - Pokedle{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pokedle.css') }}">
+{% endblock %}
 
 {% block content %}
-<h1>PokeDLE</h1>
-<!-- logic goes here next session -->
+<div class="pokedle-page">
+    <h1 class="pokedle-title">Pokedle</h1>
+    <p class="pokedle-subtitle">Guess the Pokemon. Type, height, weight, and generation!</p>
+
+    <div class="gen-select" id="gen-select">
+        {% for gen_key in generations.keys() %}
+            <button type="button" class="gen-btn" {{ 'active' if gen_key == '1' else '' }} data-gen="{{ gen_key }}">Gen {{ gen_key }}</button>
+        {% endfor %}
+    </div>
+
+    <form id="guess-form" class="pokedle-form">
+        <input type="text" id="guess-input" placeholder="Enter a Pokemon name..." autocomplete="off">
+        <button type="submit">Guess</button>
+    </form>
+    <p id="pokedle-error" class="pokedle-error"></p>
+
+    <div class="pokedle-table" id="pokedle-table">
+        <div class="pokedle-header-row">
+            <span>Pokemon</span>
+            <span>Type 1</span>
+            <span>Type 2</span>
+            <span>Gen</span>
+            <span>Height</span>
+            <span>Weight</span>
+        </div>
+        <div id="pokedle-rows"></div>
+    </div>
+
+    <p id="pokedle-win-message" class="pokedle-win-message" style="display: none;"></p>
+    <button type="button" id="new-round-btn" class="pokedle-new-btn" style="display: none;">New Pokemon...</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const TYPE_COLORS = {{ type_colors | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/pokedle.js') }}"></script>
 {% endblock %}

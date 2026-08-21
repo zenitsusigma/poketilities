@@ -1,13 +1,21 @@
 import random
 import string
+import secrets
 import requests
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from config import SITE_NAME, MY_NAME, TAGLINE, NAV_LINKS, THEME, FAVORITES, GENERATIONS, WHOS_THAT_SETTINGS, MEGA_EVOLUTIONS, REGIONAL_FORMS, TYPE_CHART, TYPE_COLORS, QUIZ_QUESTIONS
 
 app = Flask(__name__)
+app.secret_key = secrets.token_hex(16)
 
 socketio = SocketIO(app)
+
+def generation_for_id(pokemon_id):
+    for gen_key, start, end in GENERATIONS.items():
+        if start <= pokemon_id <= end:
+            return gen_key
+    return None
 
 rooms = {}  # room_code -> room state, lives in memory while the server runs
 
@@ -59,7 +67,94 @@ def whos_that():
 
 @app.route("/pokedle")
 def pokedle():
-    return render_template("pokedle.html")
+    return render_template("pokedle.html", generations=GENERATIONS, type_colors=TYPE_COLORS)
+
+@app.route("/api/pokedle/new")
+def pokedle_now():
+    selected = request.args.get("gens", "")
+    selected_keys = [g for g in selected.split(",") if g in GENERATIONS] or list(GENERATIONS.keys())
+    gen_key = random.choice(selected_keys)
+    start, end = GENERATIONS[gen_key]
+    pokemon_id = random.randint(start, end)
+
+    response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}")
+    data = response.json()
+
+    types = [t["type"]["name"] for t in data["types"]]
+    while len(types) < 2:
+        types.append(None)
+
+    session["pokedle_answer"] = {
+        "id": data["id"],
+        "name": data["name"],
+        "types": types,
+        "height": data["height"],
+        "weight": data["weight"],
+        "generation": generation_for_id(data["id"]),
+    }
+    session["pokedle_guess_count"] = 0
+
+    return jsonify({"started": True})
+
+@app.route("/api/pokedle/guess", methods=["POST"])
+def pokedle_guess():
+    answer = session.get("pokedle_answer")
+    if not answer:
+        return jsonify({"error": "No round in progress. Refresh to start a new one."}), 400
+
+    body = request.get_json(silent=True) or {}
+    guess_name = body.get("guess", "").strip().lower()
+    if not guess_name:
+        return jsonify({"error": "Type a Pokemon name first."}), 400
+
+    response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{guess_name}")
+    if response.status_code != 200:
+        return jsonify({"error": f'"{guess_name}" isn\'t a Pokemon I recognize \u2014 check the spelling.'}), 404
+
+    data = response.json()
+    guess_types = [t["type"]["name"] for t in data["types"]]
+    while len(guess_types) < 2:
+        guess_types.append(None)
+
+    session["pokedle_guess_count"] = session.get("pokedle_guess_count", 0) + 1
+
+    def type_status(guess_type, slot_index):
+        if guess_type is None:
+            return "absent"
+        if answer["types"][slot_index] == guess_type:
+            return "correct"
+        if guess_type in answer["types"]:
+            return "present"
+        return "absent"
+
+    def numeric_hint(guess_value, answer_value):
+        if guess_value == answer_value:
+            return "correct"
+        return "up" if guess_value < answer_value else "down"
+
+    correct = data["id"] == answer["id"]
+    guess_gen = generation_for_id(data["id"])
+
+    result = {
+        "guessName": data["name"],
+        "correct": correct,
+        "types": [
+            {"value": guess_types[0], "status": type_status(guess_types[0], 0)},
+            {"value": guess_types[1], "status": type_status(guess_types[1], 1)},
+        ],
+        "generation": {
+            "value": guess_gen,
+            "status": numeric_hint(int(guess_gen or 0), int(answer["generation"] or 0))
+        },
+        "height": {"value": data["height"], "status": numeric_hint(data["height"], answer["height"])},
+        "weight": {"value": data["weight"], "status": numeric_hint(data["weight"], answer["weight"])},
+    }
+
+    if correct:
+        result["answerName"] = answer["name"]
+        session.pop("pokedle_answer", None)
+
+    return jsonify(result)
 
 @app.route("/pokedex-game")
 def pokedex_game(): 

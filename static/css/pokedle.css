@@ -1,0 +1,124 @@
+.pokedle-page {
+    background: var(--color-bg-alt);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.pokedle-subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.pokedle-form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.pokedle-form input {
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius);
+    border: none;
+    min-width: 240px;
+}
+
+.pokedle-form button {
+    padding: 0.6rem 1.4rem;
+    border-radius: var(--radius);
+    border: none;
+    background: var(--color-primary);
+    color: #0f1115;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.pokedle-error {
+    color: #ff6169;
+    min-height: 1.3rem;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.pokedle-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 1rem;
+}
+
+.pokedle-header-row, .pokedle-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 0.7fr 0.9fr 0.9fr;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.pokedle-header-row {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    padding: 0 0.6rem;
+}
+
+.pokedle-cell {
+    padding: 0.6rem 0.5rem;
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: capitalize;
+}
+
+.pokedle-cell--empty { color: var(--color-text-muted); }
+
+.pokedle-cell--type {
+    background: color-mix(in srgb, var(--type-color) 25%, var(--color-bg));
+    border: 2px solid var(--type-color);
+}
+
+.pokedle-cell--correct {
+    background: rgba(74, 222, 128, 0.2);
+    border: 2px solid #4ade80;
+}
+
+.pokedle-cell--present {
+    background: rgba(255, 203, 61, 0.15);
+    border: 2px dashed #ffcb3d;
+}
+
+.pokedle-cell--absent {
+    opacity: 0.5;
+}
+
+.pokedle-cell--absent {
+    opacity: 0.5;
+}
+
+.pokedle-cell--name.pokedle-cell--correct {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: #0f1115;
+}
+
+.pokedle-win-message {
+    margin-top: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.pokedle-new-btn {
+    margin-top: 0.75rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: var(--radius);
+    border: none;
+    background: var(--color-primary);
+    color: #0f1115;
+    font-weight: 700;
+    cursor: pointer;
+}
