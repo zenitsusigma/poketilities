@@ -1,0 +1,88 @@
+.calc-page {
+    background: var(--color-bg-alt);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.calc-title { text-align: center; margin-bottom: 0.4rem; }
+
+.calc-subtitle {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+
+.calc-picker { margin-bottom: 1.5rem; }
+
+.calc-picker-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.6rem;
+}
+
+.calc-optional { text-transform: none; font-weight: 400; letter-spacing: normal; }
+
+.calc-type-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.calc-type-btn {
+    --type-color: var(--color-primary);
+    padding: 0.45rem 1rem;
+    border-radius: var(--radius);
+    border: 2px solid var(--type-color);
+    background: color-mix(in srgb, var(--type-color) 15%, transparent);
+    color: var(--color-text);
+    font-weight: 600;
+    text-transform: capitalize;
+    cursor: pointer;
+    transition: transform 0.12s ease, background 0.15s ease;
+}
+
+.calc-type-btn:hover { transform: translateY(-2px); }
+
+.calc-type-btn.active {
+    background: var(--type-color);
+    color: #0f1115;
+}
+
+.calc-results { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
+
+.calc-result-group h2 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.calc-result-group--4x h2 { color: #ff4d4d; }
+.calc-result-group--2x h2 { color: #ff9f4d; }
+.calc-result-group--half h2 { color: #4ade80; }
+.calc-result-group--quarter h2 { color: #22c55e; }
+.calc-result-group--immune h2 { color: #7dd3fc; }
+
+.calc-chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.calc-chip {
+    --type-color: var(--color-primary);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius);
+    background: var(--type-color);
+    color: #0f1115;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+}
+
+.calc-placeholder {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-top: 2rem;
+}
