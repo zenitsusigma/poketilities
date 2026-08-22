@@ -179,9 +179,90 @@ def pokedle_guess():
 
     return jsonify(result)
 
+STAT_CATEGORIES = {
+    "hp": "HP",
+    "attack": "Attack",
+    "defense": "Defense",
+    "special-attack": "Sp. Attack",
+    "special-defense": "Sp. Defense",
+    "speed": "Speed",
+}
+
+def fetch_random_pokemon(selected_keys):
+    gen_key = random.choice(selected_keys)
+    start, end = GENERATIONS[gen_key]
+    pokemon_id = random.randint(start, end)
+    response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}")
+    return response.json()
+
 @app.route("/pokedex-game")
-def pokedex_game(): 
-    return render_template("pokedex-game.html")
+def pokedex_game():
+    return render_template("pokedex-game.html", generations=GENERATIONS)
+
+@app.route("/api/pokedex-game/round")
+def pokedex_game_round():
+    selected = request.args.get("gens", "")
+    selected_keys = [g for g in selected.split(",") if g in GENERATIONS] or list(GENERATIONS.keys())
+
+    left_data = fetch_random_pokemon(selected_keys)
+    right_data = fetch_random_pokemon(selected_keys)
+    # Avoid a Pokemon facing itself — just re-roll the right side once, good enough odds-wise
+    if right_data["id"] == left_data["id"]:
+        right_data = fetch_random_pokemon(selected_keys)
+
+    category = random.choice(list(STAT_CATEGORIES.keys()))
+
+    def stat_lookup(data):
+        stats = {s["stat"]["name"]: s["base_stat"] for s in data["stats"]}
+        artwork = data["sprites"].get("other", {}).get("official-artwork", {}).get("front_default")
+        return {
+            "name": data["name"],
+            "sprite": artwork or data["sprites"].get("front_default"),
+            "value": stats.get(category, 0),
+        }
+
+    left = stat_lookup(left_data)
+    right = stat_lookup(right_data)
+
+    session["pokedex_game_round"] = {
+        "left_value": left["value"],
+        "right_value": right["value"],
+    }
+
+    return jsonify({
+        "category": STAT_CATEGORIES[category],
+        "left": {"name": left["name"], "sprite": left["sprite"]},
+        "right": {"name": right["name"], "sprite": right["sprite"]},
+    })
+
+@app.route("/api/pokedex-game/guess", methods=["POST"])
+def pokedex_game_guess():
+    round_data = session.get("pokedex_game_round")
+    if not round_data:
+        return jsonify({"error": "No round in progress. Refresh to start a new one."}), 400
+
+    body = request.get_json(silent=True) or {}
+    choice = body.get("choice")
+    if choice not in ("left", "right"):
+        return jsonify({"error": "Invalid choice."}), 400
+
+    left_value = round_data["left_value"]
+    right_value = round_data["right_value"]
+
+    if left_value == right_value:
+        correct = True  # a true tie counts as a win either way, rare but fair
+    elif choice == "left":
+        correct = left_value > right_value
+    else:
+        correct = right_value > left_value
+
+    session.pop("pokedex_game_round", None)
+
+    return jsonify({
+        "correct": correct,
+        "leftValue": left_value,
+        "rightValue": right_value,
+    })
 
 @app.route("/quiz")
 def quiz():

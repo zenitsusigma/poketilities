@@ -1,7 +1,49 @@
 {% extends "base.html" %}
-{% block title %}{{ site_name }} - Dex Game{% endblock %}
+{% block title %}{{ site_name }} - Pokedex Game{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pokedex-game.css') }}">
+{% endblock %}
 
 {% block content %}
-<h1>Dex Game</h1>
-<!-- logic goes here next session -->
+<div class="sd-page">
+    <h1 class="sd-title">Stat Showdown</h1>
+    <p class="sd-subtitle">Which Pokemon has the higher stat? Guess right to keep your streak alive.</p>
+
+    <div class="gen-select" id="gen-select">
+        {% for gen_key in generations.keys() %}
+            <button type="button" class="gen-btn {{ 'active' if gen_key == '1' else '' }}" data-gen="{{ gen_key }}">Gen {{ gen_key }}</button>
+        {% endfor %}
+    </div>
+
+    <div class="sd-score-row">
+        <p>Streak <span id="sd-streak">0</span></p>
+        <p>Best <span id="sd-best-streak">0</span></p>
+    </div>
+
+    <p class="sd-category" id="sd-category">Loading&hellip;</p>
+
+    <div class="sd-arena" id="sd-arena">
+        <button type="button" class="sd-card" id="sd-left" data-side="left">
+            <img class="sd-sprite" id="sd-left-sprite" src="" alt="">
+            <span class="sd-name" id="sd-left-name"></span>
+            <span class="sd-value" id="sd-left-value"></span>
+        </button>
+
+        <span class="sd-vs">VS</span>
+
+        <button type="button" class="sd-card" id="sd-right" data-side="right">
+            <img class="sd-sprite" id="sd-right-sprite" src="" alt="">
+            <span class="sd-name" id="sd-right-name"></span>
+            <span class="sd-value" id="sd-right-value"></span>
+        </button>
+    </div>
+
+    <p class="sd-feedback" id="sd-feedback"></p>
+    <button type="button" id="sd-next-btn" class="sd-btn" style="display: none;">Next Round</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pokedex-game.js') }}"></script>
 {% endblock %}
