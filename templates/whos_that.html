@@ -121,14 +121,30 @@
         </div>
     </div>
 
-    <div class="wt-modal" id="leaderboard-modal">
+        <div class="wt-modal" id="leaderboard-modal">
         <div class="wt-modal-card">
             <div class="wt-modal-header">
-                <h2>Local Leaderboard</h2>
+                <h2>Leaderboard</h2>
                 <button type="button" class="wt-modal-close" id="close-leaderboard-btn" aria-label="Close">&times;</button>
             </div>
-            <p class="wt-modal-note">Best runs saved on this browser. A synced, site-wide leaderboard needs a database &mdash; next up.</p>
+            <p class="wt-modal-note">Global &mdash; everyone who's submitted a run.</p>
+            <ul class="wt-history-list wt-history-list--modal" id="global-leaderboard-list"></ul>
+            <p class="wt-modal-note" style="margin-top: 1rem;">This browser only.</p>
             <ul class="wt-history-list wt-history-list--modal" id="leaderboard-list"></ul>
+        </div>
+    </div>
+
+    <div class="wt-modal" id="submit-score-modal">
+        <div class="wt-modal-card">
+            <div class="wt-modal-header">
+                <h2>Save Your Score</h2>
+                <button type="button" class="wt-modal-close" id="skip-submit-btn" aria-label="Close">&times;</button>
+            </div>
+            <p class="wt-modal-note">Add yourself to the global leaderboard with a score of <strong id="submit-score-value"></strong>.</p>
+            <form id="submit-score-form" class="pokedle-form" style="margin-top: 0.5rem;">
+                <input type="text" id="submit-score-name" placeholder="Your name" maxlength="20" required>
+                <button type="submit">Save</button>
+            </form>
         </div>
     </div>
 

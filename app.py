@@ -1,6 +1,7 @@
 import random
 import string
 import secrets
+import sqlite3
 import requests
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -12,10 +13,32 @@ app.secret_key = secrets.token_hex(16)
 socketio = SocketIO(app)
 
 def generation_for_id(pokemon_id):
-    for gen_key, start, end in GENERATIONS.items():
+    for gen_key, (start, end) in GENERATIONS.items():
         if start <= pokemon_id <= end:
             return gen_key
     return None
+
+DB_PATH = "poketilities.db"
+
+def get_db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def init_db():
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS leaderboard (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            player_name TEXT NOT NULL,
+            score INTEGER NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+init_db()
 
 rooms = {}  # room_code -> room state, lives in memory while the server runs
 
@@ -222,6 +245,33 @@ def random_pokemon():
         "name": answer,
         "sprite": artwork or sprites.get("front_default"),
     })
+
+@app.route("/api/leaderboard/submit", methods=["POST"])
+def leaderboard_submit():
+    body = request.get_json(silent=True) or {}
+    name = body.get("name", "").strip()[:20]
+    score = body.get("score")
+
+    if not name or not isinstance(score, int) or score <= 0:
+        return jsonify({"error": "Need a name and a positive score."}), 400
+
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO leaderboard (player_name, score) VALUES (?, ?)",
+        (name, score),
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"saved": True})
+
+@app.route("/api/leaderboard/top")
+def leaderboard_top():
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT player_name, score, created_at FROM leaderboard ORDER BY score DESC, created_at ASC LIMIT 10"
+    ).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in rows])
 
 @app.route("/multiplayer")
 def multiplayer_home():

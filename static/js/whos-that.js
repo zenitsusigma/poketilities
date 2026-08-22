@@ -30,21 +30,12 @@ const leaderboardBtn = document.getElementById("leaderboard-btn");
 const leaderboardModal = document.getElementById("leaderboard-modal");
 const closeLeaderboardBtn = document.getElementById("close-leaderboard-btn");
 const leaderboardList = document.getElementById("leaderboard-list");
-
-const genButtons = document.querySelectorAll(".wt-gen-btn:not(#all-gen-btn)");
-const allGenBtn = document.getElementById("all-gen-btn");
-const megaToggle = document.getElementById("mega-toggle");
-const regionalToggle = document.getElementById("regional-toggle");
-const livesEls = document.querySelectorAll(".wt-life");
-const historyList = document.getElementById("history-list");
-const fullHistoryList = document.getElementById("full-history-list");
-const expandHistoryBtn = document.getElementById("expand-history-btn");
-const historyModal = document.getElementById("history-modal");
-const closeHistoryBtn = document.getElementById("close-history-btn");
-const leaderboardBtn = document.getElementById("leaderboard-btn");
-const leaderboardModal = document.getElementById("leaderboard-modal");
-const closeLeaderboardBtn = document.getElementById("close-leaderboard-btn");
-const leaderboardList = document.getElementById("leaderboard-list");
+const globalLeaderboardList = document.getElementById("global-leaderboard-list");
+const submitScoreModal = document.getElementById("submit-score-modal");
+const submitScoreForm = document.getElementById("submit-score-form");
+const submitScoreName = document.getElementById("submit-score-name");
+const submitScoreValue = document.getElementById("submit-score-value");
+const skipSubmitBtn = document.getElementById("skip-submit-btn");
 
 const DIFF_CAPTIONS = {
     easy: "Easy: full colour sprite, hint kicks in after a few misses.",
@@ -391,9 +382,52 @@ function renderLeaderboard() {
 
 expandHistoryBtn.addEventListener("click", () => historyModal.classList.add("wt-modal--open"));
 closeHistoryBtn.addEventListener("click", () => historyModal.classList.remove("wt-modal--open"));
+async function renderGlobalLeaderboard() {
+    globalLeaderboardList.innerHTML = '<li class="wt-history-empty">Loading&hellip;</li>';
+    try {
+        const response = await fetch("/api/leaderboard/top");
+        const rows = await response.json();
+
+        if (rows.length === 0) {
+            globalLeaderboardList.innerHTML = '<li class="wt-history-empty">No runs submitted yet &mdash; be the first!</li>';
+            return;
+        }
+
+        globalLeaderboardList.innerHTML = "";
+        rows.forEach((row, i) => {
+            const li = document.createElement("li");
+            li.className = "wt-history-item";
+            li.innerHTML = `<span>#${i + 1} ${row.player_name}</span><span>${row.score} pts</span>`;
+            globalLeaderboardList.appendChild(li);
+        });
+    } catch (err) {
+        globalLeaderboardList.innerHTML = '<li class="wt-history-empty">Couldn\'t reach the leaderboard right now.</li>';
+    }
+}
+
 leaderboardBtn.addEventListener("click", () => {
     renderLeaderboard();
+    renderGlobalLeaderboard();
     leaderboardModal.classList.add("wt-modal--open");
+});
+
+submitScoreForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = submitScoreName.value.trim();
+    if (!name) return;
+
+    await fetch("/api/leaderboard/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, score }),
+    });
+
+    submitScoreModal.classList.remove("wt-modal--open");
+    submitScoreName.value = "";
+});
+
+skipSubmitBtn.addEventListener("click", () => {
+    submitScoreModal.classList.remove("wt-modal--open");
 });
 closeLeaderboardBtn.addEventListener("click", () => leaderboardModal.classList.remove("wt-modal--open"));
 [historyModal, leaderboardModal].forEach((modal) => {
@@ -449,6 +483,11 @@ function gameOverSequence() {
     feedback.innerHTML = `Run over &mdash; final score <strong>${score}</strong>. Press Enter or hit Play Again.`;
     feedback.className = "wt-feedback wt-feedback--bad";
     playAgainBtn.style.display = "inline-block";
+
+    if (score > 0) {
+        submitScoreValue.textContent = score;
+        submitScoreModal.classList.add("wt-modal--open");
+    }
 }
 
 function playAgain() {
