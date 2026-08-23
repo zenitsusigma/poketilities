@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} - Akinator{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/akinator.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="ak-page">
+    <h1 class="ak-title">Pokemon Akinator</h1>
+    <p class="ak-subtitle">Think of a Pokemon. Answer honestly, and I'll try to guess it.</p>
+
+    <div id="ak-question-view" class="ak-view">
+        <p class="ak-progress" id="ak-progress"></p>
+        <p class="ak-question" id="ak-question">Loading&hellip;</p>
+        <div class="ak-answers">
+            <button type="button" class="ak-btn ak-btn--yes" data-answer="yes">Yes</button>
+            <button type="button" class="ak-btn ak-btn--no" data-answer="no">No</button>
+            <button type="button" class="ak-btn ak-btn--unsure" data-answer="unsure">Unsure</button>
+        </div>
+    </div>
+
+    <div id="ak-guess-view" class="ak-view" style="display: none;">
+        <p class="ak-guess-label">I think your Pokemon is&hellip;</p>
+        <div class="ak-guess-card">
+            <div class="pokeball-spinner" id="ak-guess-spinner"></div>
+            <img id="ak-guess-sprite" src="" alt="" style="display: none;">
+            <span class="ak-guess-name" id="ak-guess-name"></span>
+        </div>
+        <div class="ak-answers">
+            <button type="button" class="ak-btn ak-btn--yes" id="ak-correct-btn">Correct!</button>
+            <button type="button" class="ak-btn ak-btn--no" id="ak-wrong-btn">Nope</button>
+        </div>
+    </div>
+
+    <div id="ak-end-view" class="ak-view" style="display: none;">
+        <p class="ak-end-message" id="ak-end-message"></p>
+        <button type="button" id="ak-restart-btn" class="ak-btn ak-btn--restart">Play Again</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/akinator.js') }}"></script>
+{% endblock %}

@@ -5,7 +5,8 @@ import sqlite3
 import requests
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, emit
-from config import SITE_NAME, MY_NAME, TAGLINE, NAV_LINKS, THEME, FAVORITES, GENERATIONS, WHOS_THAT_SETTINGS, MEGA_EVOLUTIONS, REGIONAL_FORMS, TYPE_CHART, TYPE_COLORS, QUIZ_QUESTIONS
+
+from config import SITE_NAME, MY_NAME, TAGLINE, NAV_LINKS, THEME, FAVORITES, GENERATIONS, WHOS_THAT_SETTINGS, MEGA_EVOLUTIONS, REGIONAL_FORMS, TYPE_CHART, TYPE_COLORS, QUIZ_QUESTIONS, AKINATOR_POKEMON, AKINATOR_MAX_QUESTIONS
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -361,6 +362,178 @@ def leaderboard_top():
     ).fetchall()
     conn.close()
     return jsonify([dict(row) for row in rows])
+AKINATOR_SIMPLE_ATTRS = ["legendary", "starter", "dual_type", "pseudo", "eeveelution", "gen_le_3", "gen_le_6"]
+
+def akinator_matches(pokemon, attr_key):
+    if attr_key.startswith("type:"):
+        return attr_key.split(":", 1)[1] in pokemon["types"]
+    if attr_key == "legendary":
+        return pokemon["legendary"]
+    if attr_key == "starter":
+        return pokemon["starter"]
+    if attr_key == "dual_type":
+        return len(pokemon["types"]) == 2
+    if attr_key == "pseudo":
+        return pokemon["pseudo"]
+    if attr_key == "eeveelution":
+        return pokemon["eeveelution"]
+    if attr_key == "gen_le_3":
+        return pokemon["gen"] <= 3
+    if attr_key == "gen_le_6":
+        return pokemon["gen"] <= 6
+    return False
+
+AKINATOR_QUESTION_TEXT = {
+    "legendary": "Is your Pokemon Legendary or Mythical?",
+    "starter": "Is your Pokemon one of the three starter Pokemon (in its base, unevolved form)?",
+    "dual_type": "Does your Pokemon have two types?",
+    "pseudo": "Is your Pokemon considered a \"pseudo-legendary\"?",
+    "eeveelution": "Is your Pokemon Eevee or one of its evolutions?",
+    "gen_le_3": "Is your Pokemon from Generation 1, 2, or 3?",
+    "gen_le_6": "Is your Pokemon from Generation 1 through 6?",
+}
+
+def akinator_best_question(candidates, asked):
+    options = []
+    all_types = set()
+    for c in candidates:
+        all_types.update(c["types"])
+
+    for t in sorted(all_types):
+        key = f"type:{t}"
+        if key in asked:
+            continue
+        yes = sum(1 for c in candidates if t in c["types"])
+        no = len(candidates) - yes
+        if yes == 0 or no == 0:
+            continue
+        options.append((key, yes, no, f"Is your Pokemon part {t.capitalize()} type?"))
+
+    for key in AKINATOR_SIMPLE_ATTRS:
+        if key in asked:
+            continue
+        yes = sum(1 for c in candidates if akinator_matches(c, key))
+        no = len(candidates) - yes
+        if yes and no:
+            options.append((key, yes, no, AKINATOR_QUESTION_TEXT[key]))
+
+    if not options:
+        return None
+
+    options.sort(key=lambda o: abs(o[1] - o[2]))
+    return options[0]
+
+def akinator_fetch_sprite(name):
+    try:
+        response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{name}")
+        data = response.json()
+        artwork = data["sprites"].get("other", {}).get("official-artwork", {}).get("front_default")
+        return artwork or data["sprites"].get("front_default")
+    except Exception:
+        return None
+
+@app.route("/akinator")
+def akinator():
+    return render_template("akinator.html")
+
+@app.route("/api/akinator/start")
+def akinator_start():
+    session["akinator"] = {
+        "candidates": [p["name"] for p in AKINATOR_POKEMON],
+        "asked": [],
+        "question_count": 0,
+        "current_attr": None,
+        "guess_pool": [],
+    }
+    return akinator_next_question()
+
+def akinator_next_question():
+    state = session["akinator"]
+    candidates = [p for p in AKINATOR_POKEMON if p["name"] in state["candidates"]]
+
+    if len(candidates) <= 1 or state["question_count"] >= AKINATOR_MAX_QUESTIONS:
+        return akinator_make_guess(candidates)
+
+    result = akinator_best_question(candidates, set(state["asked"]))
+    if result is None:
+        return akinator_make_guess(candidates)
+
+    attr_key, yes, no, question_text = result
+    state["current_attr"] = attr_key
+    session["akinator"] = state
+
+    return jsonify({
+        "guess": False,
+        "question": question_text,
+        "questionNumber": state["question_count"] + 1,
+        "maxQuestions": AKINATOR_MAX_QUESTIONS,
+    })
+
+def akinator_make_guess(candidates):
+    state = session["akinator"]
+    if not candidates:
+        return jsonify({"guess": True, "name": None, "sprite": None})
+
+    guess = candidates[0]
+    state["guess_pool"] = [c["name"] for c in candidates[1:]]
+    state["candidates"] = [guess["name"]]
+    session["akinator"] = state
+
+    return jsonify({
+        "guess": True,
+        "name": guess["name"],
+        "sprite": akinator_fetch_sprite(guess["name"]),
+    })
+
+@app.route("/api/akinator/answer", methods=["POST"])
+def akinator_answer():
+    state = session.get("akinator")
+    if not state or state["current_attr"] is None:
+        return jsonify({"error": "No game in progress."}), 400
+
+    body = request.get_json(silent=True) or {}
+    answer = body.get("answer")
+    attr_key = state["current_attr"]
+
+    if answer in ("yes", "no"):
+        candidates = [p for p in AKINATOR_POKEMON if p["name"] in state["candidates"]]
+        target_value = answer == "yes"
+        filtered = [c for c in candidates if akinator_matches(c, attr_key) == target_value]
+        state["candidates"] = [c["name"] for c in filtered]
+    # "unsure" — don't filter, just stop asking this question again
+
+    state["asked"].append(attr_key)
+    state["question_count"] += 1
+    state["current_attr"] = None
+    session["akinator"] = state
+
+    return akinator_next_question()
+
+@app.route("/api/akinator/wrong", methods=["POST"])
+def akinator_wrong():
+    state = session.get("akinator")
+    if not state:
+        return jsonify({"error": "No game in progress."}), 400
+
+    pool = state.get("guess_pool", [])
+    if not pool:
+        session.pop("akinator", None)
+        return jsonify({"outOfGuesses": True})
+
+    next_guess = pool.pop(0)
+    state["guess_pool"] = pool
+    session["akinator"] = state
+
+    return jsonify({
+        "guess": True,
+        "name": next_guess,
+        "sprite": akinator_fetch_sprite(next_guess),
+    })
+
+@app.route("/api/akinator/correct", methods=["POST"])
+def akinator_correct():
+    session.pop("akinator", None)
+    return jsonify({"ok": True})
 
 @app.route("/multiplayer")
 def multiplayer_home():

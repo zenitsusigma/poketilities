@@ -1,0 +1,107 @@
+.ak-page {
+    background: var(--color-bg-alt);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.ak-subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+
+.ak-progress {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.ak-question {
+    font-size: 1.5rem;
+    font-weight: 800;
+    min-height: 4.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.ak-answers {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.ak-btn {
+    padding: 0.7rem 1.6rem;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+}
+
+.ak-btn:hover { transform: translateY(-2px); }
+
+.ak-btn--yes {
+    background: rgba(74, 222, 128, 0.15);
+    border-color: #4ade80;
+    color: #4ade80;
+}
+
+.ak-btn--no {
+    background: rgba(255, 97, 105, 0.15);
+    border-color: #ff6169;
+    color: #ff6169;
+}
+
+.ak-btn--unsure {
+    background: var(--color-bg);
+    border-color: rgba(255,255,255,0.15);
+    color: var(--color-text-muted);
+}
+
+.ak-btn--restart {
+    background: linear-gradient(135deg, var(--color-primary), #ff9f4d);
+    color: #0f1115;
+    margin-top: 1rem;
+}
+
+.ak-guess-label {
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.ak-guess-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.ak-guess-card img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+}
+
+.ak-guess-name {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    text-transform: capitalize;
+}
+
+.ak-end-message {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
