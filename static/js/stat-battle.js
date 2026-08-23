@@ -1,24 +1,26 @@
 const genButtons = document.querySelectorAll("#gen-select .gen-btn");
-const streakEl = document.getElementById("sd-streak");
-const bestStreakEl = document.getElementById("sd-best-streak");
-const categoryEl = document.getElementById("sd-category");
-const arenaEl = document.getElementById("sd-arena");
-const feedbackEl = document.getElementById("sd-feedback");
-const nextBtn = document.getElementById("sd-next-btn");
+const streakEl = document.getElementById("sb-streak");
+const bestStreakEl = document.getElementById("sb-best-streak");
+const categoryEl = document.getElementById("sb-category");
+const arenaEl = document.getElementById("sb-arena");
+const feedbackEl = document.getElementById("sb-feedback");
+const nextBtn = document.getElementById("sb-next-btn");
 
-const leftCard = document.getElementById("sd-left");
-const leftSprite = document.getElementById("sd-left-sprite");
-const leftName = document.getElementById("sd-left-name");
-const leftValue = document.getElementById("sd-left-value");
+const leftCard = document.getElementById("sb-left");
+const leftSprite = document.getElementById("sb-left-sprite");
+const leftSpinner = document.getElementById("sb-left-spinner");
+const leftName = document.getElementById("sb-left-name");
+const leftValue = document.getElementById("sb-left-value");
 
-const rightCard = document.getElementById("sd-right");
-const rightSprite = document.getElementById("sd-right-sprite");
-const rightName = document.getElementById("sd-right-name");
-const rightValue = document.getElementById("sd-right-value");
+const rightCard = document.getElementById("sb-right");
+const rightSprite = document.getElementById("sb-right-sprite");
+const rightSpinner = document.getElementById("sb-right-spinner");
+const rightName = document.getElementById("sb-right-name");
+const rightValue = document.getElementById("sb-right-value");
 
 let selectedGens = new Set(["1"]);
 let streak = 0;
-let bestStreak = parseInt(localStorage.getItem("statShowdownBestStreak") || "0", 10);
+let bestStreak = parseInt(localStorage.getItem("statBattleBestStreak") || "0", 10);
 let roundActive = false;
 
 bestStreakEl.textContent = bestStreak;
@@ -45,23 +47,40 @@ genButtons.forEach((btn) => {
 async function startRound() {
     roundActive = false;
     feedbackEl.textContent = "";
-    feedbackEl.className = "sd-feedback";
+    feedbackEl.className = "sb-feedback";
     nextBtn.style.display = "none";
     leftValue.textContent = "";
     rightValue.textContent = "";
-    leftCard.classList.remove("sd-card--correct", "sd-card--wrong");
-    rightCard.classList.remove("sd-card--correct", "sd-card--wrong");
+    leftCard.classList.remove("sb-card--correct", "sb-card--wrong");
+    rightCard.classList.remove("sb-card--correct", "sb-card--wrong");
     categoryEl.textContent = "Loading\u2026";
+
+    leftSpinner.style.display = "block";
+    rightSpinner.style.display = "block";
+    leftSprite.style.display = "none";
+    rightSprite.style.display = "none";
 
     const gensParam = Array.from(selectedGens).join(",");
     const response = await fetch(`/api/pokedex-game/round?gens=${gensParam}`);
     const data = await response.json();
 
     categoryEl.textContent = `Higher ${data.category}?`;
-    leftSprite.src = data.left.sprite;
     leftName.textContent = capitalize(data.left.name);
-    rightSprite.src = data.right.sprite;
     rightName.textContent = capitalize(data.right.name);
+
+    // Spinner stays up on each side until that specific image has actually
+    // finished downloading, not just until the API response arrives —
+    // the sprite fetch is a separate, often slower, network round-trip.
+    leftSprite.onload = () => {
+        leftSpinner.style.display = "none";
+        leftSprite.style.display = "block";
+    };
+    rightSprite.onload = () => {
+        rightSpinner.style.display = "none";
+        rightSprite.style.display = "block";
+    };
+    leftSprite.src = data.left.sprite;
+    rightSprite.src = data.right.sprite;
 
     roundActive = true;
 }
@@ -82,21 +101,21 @@ async function makeGuess(side) {
 
     const winningCard = data.leftValue >= data.rightValue ? leftCard : rightCard;
     const losingCard = data.leftValue >= data.rightValue ? rightCard : leftCard;
-    winningCard.classList.add("sd-card--correct");
-    losingCard.classList.add("sd-card--wrong");
+    winningCard.classList.add("sb-card--correct");
+    losingCard.classList.add("sb-card--wrong");
 
     if (data.correct) {
         streak++;
         if (streak > bestStreak) {
             bestStreak = streak;
-            localStorage.setItem("statShowdownBestStreak", String(bestStreak));
+            localStorage.setItem("statBattleBestStreak", String(bestStreak));
         }
         feedbackEl.textContent = "Correct!";
-        feedbackEl.className = "sd-feedback sd-feedback--good";
+        feedbackEl.className = "sb-feedback sb-feedback--good";
     } else {
         streak = 0;
         feedbackEl.textContent = "Wrong \u2014 streak reset.";
-        feedbackEl.className = "sd-feedback sd-feedback--bad";
+        feedbackEl.className = "sb-feedback sb-feedback--bad";
     }
 
     streakEl.textContent = streak;
