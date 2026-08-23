@@ -90,13 +90,11 @@ def whos_that():
 
 @app.route("/pokedle")
 def pokedle():
-    return render_template("pokedle.html", generations=GENERATIONS, type_colors=TYPE_COLORS)
+    return render_template("pokedle.html", type_colors=TYPE_COLORS)
 
 @app.route("/api/pokedle/new")
 def pokedle_now():
-    selected = request.args.get("gens", "")
-    selected_keys = [g for g in selected.split(",") if g in GENERATIONS] or list(GENERATIONS.keys())
-    gen_key = random.choice(selected_keys)
+    gen_key = random.choice(list(GENERATIONS.keys()))
     start, end = GENERATIONS[gen_key]
     pokemon_id = random.randint(start, end)
 
@@ -161,6 +159,7 @@ def pokedle_guess():
     result = {
         "guessName": data["name"],
         "correct": correct,
+        "guessCount": session["pokedle_guess_count"],
         "types": [
             {"value": guess_types[0], "status": type_status(guess_types[0], 0)},
             {"value": guess_types[1], "status": type_status(guess_types[1], 1)},
@@ -178,6 +177,15 @@ def pokedle_guess():
         session.pop("pokedle_answer", None)
 
     return jsonify(result)
+
+@app.route("/api/pokedle/quit", methods=["POST"])
+def pokedle_quit():
+    answer = session.get("pokedle_answer")
+    if not answer:
+        return jsonify({"error": "No round in progress."}), 400
+
+    session.pop("pokedle_answer", None)
+    return jsonify({"answerName": answer["name"]})
 
 STAT_CATEGORIES = {
     "hp": "HP",

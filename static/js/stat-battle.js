@@ -3,7 +3,7 @@ const streakEl = document.getElementById("sb-streak");
 const bestStreakEl = document.getElementById("sb-best-streak");
 const categoryEl = document.getElementById("sb-category");
 const arenaEl = document.getElementById("sb-arena");
-const feedbackEl = document.getElementById("sb-feedback");
+const feedbackEl = document.getElementById("sb-feedback");a
 const nextBtn = document.getElementById("sb-next-btn");
 
 const leftCard = document.getElementById("sb-left");

@@ -1,27 +1,16 @@
-const genButtons = document.querySelectorAll("#gen-select .gen-btn");
 const guessForm = document.getElementById("guess-form");
 const guessInput = document.getElementById("guess-input");
+const submitBtn = document.getElementById("guess-submit-btn");
+const submitText = document.getElementById("guess-submit-text");
+const submitSpinner = document.getElementById("guess-spinner");
+const quitBtn = document.getElementById("quit-btn");
 const errorEl = document.getElementById("pokedle-error");
 const rowsEl = document.getElementById("pokedle-rows");
 const winMessageEl = document.getElementById("pokedle-win-message");
 const newRoundBtn = document.getElementById("new-round-btn");
 
-let selectedGens = new Set(["1"]);
 let solved = false;
-
-genButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        const gen = btn.dataset.gen;
-        if (selectedGens.has(gen)) {
-            if (selectedGens.size === 1) return;
-            selectedGens.delete(gen);
-        } else {
-            selectedGens.add(gen);
-            btn.classList.add("active");
-        }
-        startNewRound();
-    });
-});
+let alreadyGuessed = new Set();
 
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -40,8 +29,15 @@ function numericCellHTML(numResult, formatter) {
     return `<span class="pokedle-cell pokedle-cell--${numResult.status}">${formatter(numResult.value)}${arrow}</span>`;
 }
 
+function setSubmitLoading(isLoading) {
+    submitBtn.disabled = isLoading;
+    submitText.style.display = isLoading ? "none" : "inline";
+    submitSpinner.style.display = isLoading ? "block" : "none";
+}
+
 async function startNewRound() {
     solved = false;
+    alreadyGuessed = new Set();
     errorEl.textContent = "";
     rowsEl.innerHTML = "";
     winMessageEl.style.display = "none";
@@ -50,7 +46,7 @@ async function startNewRound() {
     guessInput.value = "";
     guessInput.focus();
 
-    await fetch(`/api/pokedle/new?gens=${Array.from(selectedGens).join(",")}`);
+    await fetch("/api/pokedle/new");
 }
 
 guessForm.addEventListener("submit", async (e) => {
@@ -62,17 +58,35 @@ guessForm.addEventListener("submit", async (e) => {
 
     errorEl.textContent = "";
 
-    const response = await fetch("/api/pokedle/guess", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ guess }),
-    });
-    const data = await response.json();
+    // Check for a repeat guess before even hitting the network — cheaper,
+    // faster feedback, and stops you from wasting a look-up on a name
+    // you've already tried this round.
+    const normalizedGuess = guess.toLowerCase();
+    if (alreadyGuessed.has(normalizedGuess)) {
+        errorEl.textContent = `You already guessed "${capitalize(normalizedGuess)}" this round.`;
+        return;
+    }
+
+    setSubmitLoading(true);
+
+    let data;
+    try {
+        const response = await fetch("/api/pokedle/guess", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ guess }),
+        });
+        data = await response.json();
+    } finally {
+        setSubmitLoading(false);
+    }
 
     if (data.error) {
         errorEl.textContent = data.error;
         return;
     }
+
+    alreadyGuessed.add(data.guessName.toLowerCase());
 
     const row = document.createElement("div");
     row.className = "pokedle-row";
@@ -94,6 +108,21 @@ guessForm.addEventListener("submit", async (e) => {
         winMessageEl.style.display = "block";
         newRoundBtn.style.display = "inline-block";
     }
+});
+
+quitBtn.addEventListener("click", async () => {
+    if (solved) return;
+
+    const response = await fetch("/api/pokedle/quit", { method: "POST" });
+    const data = await response.json();
+
+    if (data.error) return;
+
+    solved = true;
+    guessInput.disabled = true;
+    winMessageEl.textContent = `Quit \u2014 it was ${capitalize(data.answerName)}.`;
+    winMessageEl.style.display = "block";
+    newRoundBtn.style.display = "inline-block";
 });
 
 newRoundBtn.addEventListener("click", startNewRound);

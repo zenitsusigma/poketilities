@@ -10,15 +10,13 @@
     <h1 class="pokedle-title">Pokedle</h1>
     <p class="pokedle-subtitle">Guess the Pokemon. Type, height, weight, and generation!</p>
 
-    <div class="gen-select" id="gen-select">
-        {% for gen_key in generations.keys() %}
-            <button type="button" class="gen-btn" {{ 'active' if gen_key == '1' else '' }} data-gen="{{ gen_key }}">Gen {{ gen_key }}</button>
-        {% endfor %}
-    </div>
-
     <form id="guess-form" class="pokedle-form">
         <input type="text" id="guess-input" placeholder="Enter a Pokemon name..." autocomplete="off">
-        <button type="submit">Guess</button>
+        <button type="submit" id="guess-submit-btn">
+            <span id="guess-submit-text">Guess</span>
+            <div class="pokeball-spinner pokeball-spinner--small" id="guess-spinner" style="display: none;"></div>
+        </button>
+        <button type="button" id="quit-btn" class="pokedle-quit-btn">Quit</button>
     </form>
     <p id="pokedle-error" class="pokedle-error"></p>
 

@@ -3,11 +3,10 @@ MY_NAME = "Arham"
 TAGLINE = "Gotta make 'em all!"
 
 NAV_LINKS = [
-    ("Home", "index"),
     ("Calculator", "calculator"),
     ("Who's That Pokemon?", "whos_that"),
     ("Pokedle", "pokedle"),
-    ("Pokedex Game", "pokedex_game"),
+    ("Stat Battle", "pokedex_game"),
     ("Quiz", "quiz"),
     ("Favorites", "favorites"),
     ("Contact", "contact"),
