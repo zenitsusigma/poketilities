@@ -2,6 +2,8 @@ import random
 import string
 import secrets
 import sqlite3
+import re
+import unicodedata
 import requests
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -362,6 +364,66 @@ def leaderboard_top():
     ).fetchall()
     conn.close()
     return jsonify([dict(row) for row in rows])
+def normalize_pokemon_name(name):
+    """Strips accents/punctuation the same way the client-side JS does
+    (e.g. Flabebe typed with or without the accent both match), so a
+    guess and the true answer always compare fairly."""
+    nfkd = unicodedata.normalize("NFD", name)
+    stripped = "".join(c for c in nfkd if not unicodedata.combining(c))
+    return re.sub(r"[^a-z'-]", "", stripped.lower())
+
+@app.route("/pokedex")
+def pokedex_naming():
+    return render_template("pokedex.html", generations=GENERATIONS)
+
+@app.route("/api/pokedex/reveal")
+def pokedex_reveal():
+    dex_id = request.args.get("id", type=int)
+    if not dex_id:
+        return jsonify({"error": "Missing id"}), 400
+
+    response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{dex_id}")
+    if response.status_code != 200:
+        return jsonify({"error": "Not found"}), 404
+    data = response.json()
+
+    reveals = session.get("pokedex_reveals", {})
+    reveals[str(dex_id)] = data["name"]
+    session["pokedex_reveals"] = reveals
+
+    artwork = data["sprites"].get("other", {}).get("official-artwork", {}).get("front_default")
+    return jsonify({"sprite": artwork or data["sprites"].get("front_default")})
+
+@app.route("/api/pokedex/guess", methods=["POST"])
+def pokedex_guess():
+    body = request.get_json(silent=True) or {}
+    dex_id = str(body.get("id", ""))
+    guess = normalize_pokemon_name(body.get("guess", ""))
+
+    reveals = session.get("pokedex_reveals", {})
+    answer = reveals.get(dex_id)
+    if not answer:
+        return jsonify({"error": "Reveal this Pokemon first."}), 400
+
+    correct = guess == normalize_pokemon_name(answer)
+    if correct:
+        reveals.pop(dex_id, None)
+        session["pokedex_reveals"] = reveals
+
+    return jsonify({"correct": correct, "answer": answer if correct else None})
+
+@app.route("/api/pokedex/reveal-answer", methods=["POST"])
+def pokedex_reveal_answer():
+    body = request.get_json(silent=True) or {}
+    dex_id = str(body.get("id", ""))
+    reveals = session.get("pokedex_reveals", {})
+    answer = reveals.pop(dex_id, None)
+    session["pokedex_reveals"] = reveals
+
+    if not answer:
+        return jsonify({"error": "Nothing to reveal."}), 400
+    return jsonify({"answer": answer})
+
 AKINATOR_SIMPLE_ATTRS = ["legendary", "starter", "dual_type", "pseudo", "eeveelution", "gen_le_3", "gen_le_6"]
 
 def akinator_matches(pokemon, attr_key):

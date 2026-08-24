@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} - Pokedex{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pokedex.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="px-page">
+    <h1 class="px-title">Pokedex</h1>
+    <p class="px-subtitle">Click any number, guess the Pokemon. See how much of the dex you can name.</p>
+
+    <div class="gen-select" id="gen-select">
+        {% for gen_key in generations.keys() %}
+            <button type="button" class="gen-btn {{ 'active' if gen_key == '1' else '' }}" data-gen="{{ gen_key }}">Gen {{ gen_key }}</button>
+        {% endfor %}
+    </div>
+
+    <div class="px-progress-wrap">
+        <p class="px-progress-text" id="px-progress-text">0 / 0 named</p>
+        <div class="px-progress-bar"><div class="px-progress-fill" id="px-progress-fill"></div></div>
+    </div>
+
+    <div class="px-grid" id="px-grid"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const GEN_RANGES = {{ generations | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/pokedex.js') }}"></script>
+{% endblock %}

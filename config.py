@@ -8,6 +8,7 @@ NAV_LINKS = [
     ("Pokedle", "pokedle"),
     ("Stat Battle", "pokedex_game"),
     ("Akinator", "akinator"),
+    ("Pokedex", "pokedex_naming"),
     ("Quiz", "quiz"),
     ("Favorites", "favorites"),
     ("Contact", "contact"),

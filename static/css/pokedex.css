@@ -1,0 +1,139 @@
+.px-page {
+    background: var(--color-bg-alt);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.px-subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.px-progress-wrap {
+    max-width: 400px;
+    margin: 0 auto 1.5rem;
+}
+
+.px-progress-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.4rem;
+}
+
+.px-progress-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-bg);
+    overflow: hidden;
+}
+
+.px-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), #ff9f4d);
+    transition: width 0.3s ease;
+}
+
+.px-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.6rem;
+}
+
+.px-slot {
+    background: var(--color-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 0.6rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 90px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.12s ease;
+}
+
+.px-slot:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.px-slot-number {
+    font-weight: 700;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+.px-slot--open {
+    cursor: default;
+    grid-column: span 1;
+}
+
+.px-slot--open:hover {
+    transform: none;
+}
+
+.px-slot-sprite {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+
+.px-slot-sprite--silhouette {
+    filter: brightness(0);
+}
+
+.px-slot-input {
+    width: 90%;
+    padding: 0.3rem 0.4rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.px-slot-reveal {
+    font-size: 0.65rem;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.px-slot-reveal:hover { color: var(--color-primary); }
+
+.px-slot--solved {
+    cursor: default;
+    border-color: #4ade80;
+    background: rgba(74, 222, 128, 0.08);
+}
+
+.px-slot--solved:hover { transform: none; }
+
+.px-slot-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: #4ade80;
+}
+
+@keyframes px-shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(3px); }
+    30%, 50%, 70% { transform: translateX(-5px); }
+    40%, 60% { transform: translateX(5px); }
+}
+
+.px-shake {
+    animation: px-shake 0.35s;
+    border-color: #ff6169 !important;
+}
