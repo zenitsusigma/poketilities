@@ -64,7 +64,13 @@ h1, h2, h3 { font-family: var(--font-heading); }
     background: rgba(15, 17, 25, 0.06);
 }
 
-#theme-toggle {
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+#theme-toggle, #guide-toggle {
     background: none;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
@@ -73,14 +79,112 @@ h1, h2, h3 { font-family: var(--font-heading); }
     font-size: 1.05rem;
     cursor: pointer;
     transition: transform 0.15s ease, border-color 0.15s ease;
+    color: var(--color-text);
+}
+
+#theme-toggle:hover, #guide-toggle:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
 }
 
 #theme-toggle:hover {
     transform: translateY(-2px) rotate(15deg);
-    border-color: var(--color-primary);
+}
+
+#guide-toggle {
+    font-weight: 800;
 }
 
 main { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+.site-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.site-modal--open {
+    display: flex;
+}
+
+.site-modal-card {
+    position: relative;
+    background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
+    backdrop-filter: blur(14px);
+    color: var(--color-text);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65);
+    width: 100%;
+    max-width: 32rem;
+    max-height: 80vh;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.site-modal-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 1.5rem;
+    right: 1.5rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    opacity: 0.7;
+}
+
+.site-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.85rem;
+    margin-bottom: 0.85rem;
+}
+
+.site-modal-header h2 {
+    margin: 0;
+    font-family: var(--font-heading);
+}
+
+.site-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: color 0.15s ease;
+}
+
+.site-modal-close:hover { color: #ff6169; }
+
+.site-modal-body {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.guide-section h3 {
+    color: var(--color-primary);
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.guide-section p {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
 
 .hero h1 {
     font-size: clamp(2rem, 5vw, 2.8rem);

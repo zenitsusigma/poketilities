@@ -24,8 +24,54 @@
                 <a href="{{ url_for(endpoint) }}">{{ label }}</a>
             {% endfor %}
         </nav>
-        <button id="theme-toggle" aria-label="Toggle light/dark mode">🌓</button>
+        <div class="header-actions">
+            <button id="guide-toggle" aria-label="How to play">?</button>
+            <button id="theme-toggle" aria-label="Toggle light/dark mode">🌓</button>
+        </div>
     </header>
+
+    <div class="site-modal" id="guide-modal">
+        <div class="site-modal-card">
+            <div class="site-modal-header">
+                <h2>How to Play</h2>
+                <button type="button" class="site-modal-close" id="guide-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="site-modal-body">
+                <section class="guide-section">
+                    <h3>Who's That Pokemon?</h3>
+                    <p>Guess the Pokemon before its silhouette fully reveals. Pick a difficulty (Easy hints the word length, Hard hides everything and adds a timer), choose generations, and toggle Mega Evolutions or Regional Forms for a harder pool. Type anywhere on the page to answer, Ctrl+Delete clears your guess, and you've got 3 lives per run.</p>
+                </section>
+                <section class="guide-section">
+                    <h3>Pokedle</h3>
+                    <p>Wordle-style guessing: type a Pokemon name, and each guess shows how close you are on type, generation, height, and weight, with arrows pointing toward the answer. Unlimited guesses, or hit Quit to reveal the answer and start fresh.</p>
+                </section>
+                <section class="guide-section">
+                    <h3>Stat Battle</h3>
+                    <p>Two random Pokemon, one random stat (HP, Attack, Speed, etc). Guess which one's higher to keep your streak going.</p>
+                </section>
+                <section class="guide-section">
+                    <h3>Akinator</h3>
+                    <p>Think of a Pokemon and answer Yes, No, or Unsure to each question. It'll try to guess what you're thinking of in around 9 questions or fewer &mdash; and gets a second guess if the first one's wrong.</p>
+                </section>
+                <section class="guide-section">
+                    <h3>Pokedex</h3>
+                    <p>Click any numbered slot to reveal that Pokemon's sprite and guess its name. Correct answers stay filled in for good, so you can work toward completing an entire generation over time.</p>
+                </section>
+                <section class="guide-section">
+                    <h3>Quiz</h3>
+                    <p>15 multiple-choice Pokemon trivia questions, shuffled into a new order each run.</p>
+                </section>
+                <section class="guide-section">
+                    <h3>Calculator</h3>
+                    <p>Pick one or two types and instantly see everything that's 4x or 2x super effective, resisted, or a complete dead end against that combo.</p>
+                </section>
+                <section class="guide-section">
+                    <h3>Multiplayer</h3>
+                    <p>Create a room and share the code, or join one a friend made. Everyone in the room sees the same Pokemon at once &mdash; first correct guess wins the round.</p>
+                </section>
+            </div>
+        </div>
+    </div>
 
     <main>
         {% block content %}{% endblock %}

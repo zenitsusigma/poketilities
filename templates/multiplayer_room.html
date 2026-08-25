@@ -1,26 +1,41 @@
 {% extends "base.html" %}
 {% block title %}{{ site_name }} - Room {{ room_code }}{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/multiplayer-room.css') }}">
+{% endblock %}
+
 {% block content %}
-<h1>Room: <span class="room-code">{{ room_code }}</span></h1>
-<p class="room-hint">Share this code with friends (if yo got em) so they can join.</p>
+<div class="mpr-page" id="game-area">
+    <h1 class="mpr-title">Room <span class="room-code">{{ room_code }}</span></h1>
+    <p class="mpr-hint">Share this code with friends so they can join.</p>
 
-<div class="whos-that-game" id="game-area">
-    <ul id="player-list" class="player-list"></ul>
+    <div class="mpr-layout">
+        <div class="mpr-sidebar">
+            <h2 class="mpr-sidebar-title">Players</h2>
+            <ul id="player-list" class="mpr-player-list"></ul>
+        </div>
 
-    {% if is_host %}
-    <button id="start-btn" type="button">Start Game</button>
-    {% endif %}
+        <div class="mpr-main">
+            {% if is_host %}
+            <button id="start-btn" type="button" class="mpr-start-btn">Start Game</button>
+            {% else %}
+            <p class="mpr-waiting" id="mpr-waiting">Waiting for the host to start&hellip;</p>
+            {% endif %}
 
-    <div class="pokemon-stage">
-        <img id="pokemon-sprite" src="" alt="Mystery Pokemon" class="silhouette" style="display: none;">
+            <div class="mpr-stage">
+                <div class="pokeball-spinner" id="mpr-spinner" style="display: none;"></div>
+                <img id="pokemon-sprite" src="" alt="Mystery Pokemon" class="mpr-sprite" style="display: none;">
+            </div>
+
+            <div id="guess-display" class="mpr-guess"></div>
+
+            <input type="text" id="hidden-input" class="mpr-hidden-input" autocomplete="off" autocapitalize="off" spellcheck="false">
+            <p class="mpr-caption">Type anywhere &bull; Enter to guess &bull; Ctrl+Delete to clear</p>
+
+            <p id="feedback" class="mpr-feedback"></p>
+        </div>
     </div>
-
-    <div id="guess-display" class="guess-display"></div>
-
-    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="off" spellcheck="false">
-
-    <p id="feedback"></p>
 </div>
 {% endblock %}
 

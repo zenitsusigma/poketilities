@@ -9,3 +9,27 @@ toggleBtn.addEventListener("click", () => {
     root.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
 });
+
+const guideToggle = document.getElementById("guide-toggle");
+const guideModal = document.getElementById("guide-modal");
+const guideClose = document.getElementById("guide-close");
+
+guideToggle.addEventListener("click", () => {
+    guideModal.classList.add("site-modal--open");
+});
+
+guideClose.addEventListener("click", () => {
+    guideModal.classList.remove("site-modal--open");
+});
+
+guideModal.addEventListener("click", (e) => {
+    if (e.target === guideModal) {
+        guideModal.classList.remove("site-modal--open");
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        guideModal.classList.remove("site-modal--open");
+    }
+});

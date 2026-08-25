@@ -4,9 +4,11 @@ const gameArea = document.getElementById("game-area");
 const hiddenInput = document.getElementById("hidden-input");
 const guessDisplay = document.getElementById("guess-display");
 const spriteImg = document.getElementById("pokemon-sprite");
+const spinner = document.getElementById("mpr-spinner");
 const feedback = document.getElementById("feedback");
 const playerList = document.getElementById("player-list");
 const startBtn = document.getElementById("start-btn");
+const waitingMsg = document.getElementById("mpr-waiting");
 
 let roundActive = false;
 let answerLength = 0;
@@ -29,7 +31,7 @@ function renderGuess() {
     const typed = hiddenInput.value;
     if (answerLength > 0) {
         guessDisplay.innerHTML = Array.from({ length: answerLength })
-            .map((_, i) => `<span class="tile">${typed[i] || ""}</span>`)
+            .map((_, i) => `<span class="mpr-tile">${typed[i] || ""}</span>`)
             .join("");
     } else {
         guessDisplay.textContent = typed || "\u00A0";
@@ -41,7 +43,9 @@ socket.on("connect", () => {
 });
 
 socket.on("player_list", (data) => {
-    playerList.innerHTML = data.players.map((p) => `<li>${p.name} — ${p.score}</li>`).join("");
+    playerList.innerHTML = data.players
+        .map((p) => `<li class="mpr-player"><span>${p.name}</span><span class="mpr-player-score">${p.score}</span></li>`)
+        .join("");
 });
 
 socket.on("error", (data) => {
@@ -58,10 +62,18 @@ if (startBtn) {
 socket.on("round_start", (data) => {
     roundActive = true;
     feedback.textContent = "";
+    feedback.className = "mpr-feedback";
     hiddenInput.value = "";
+    if (waitingMsg) waitingMsg.style.display = "none";
+
+    spinner.style.display = "block";
+    spriteImg.style.display = "none";
+    spriteImg.classList.add("mpr-silhouette");
+    spriteImg.onload = () => {
+        spinner.style.display = "none";
+        spriteImg.style.display = "block";
+    };
     spriteImg.src = data.sprite;
-    spriteImg.style.display = "inline-block";
-    spriteImg.classList.add("silhouette");
     answerLength = data.length || 0;
     renderGuess();
     focusInput();
@@ -69,15 +81,18 @@ socket.on("round_start", (data) => {
 
 socket.on("round_won", (data) => {
     roundActive = false;
-    spriteImg.classList.remove("silhouette");
+    spriteImg.classList.remove("mpr-silhouette");
     feedback.textContent = `${data.winner} got it! It was ${data.answer}.`;
-    playerList.innerHTML = data.players.map((p) => `<li>${p.name} — ${p.score}</li>`).join("");
+    feedback.className = "mpr-feedback mpr-feedback--good";
+    playerList.innerHTML = data.players
+        .map((p) => `<li class="mpr-player"><span>${p.name}</span><span class="mpr-player-score">${p.score}</span></li>`)
+        .join("");
 });
 
 socket.on("wrong_guess", () => {
-    guessDisplay.classList.remove("shake");
+    guessDisplay.classList.remove("mpr-shake");
     void guessDisplay.offsetWidth;
-    guessDisplay.classList.add("shake");
+    guessDisplay.classList.add("mpr-shake");
 });
 
 hiddenInput.addEventListener("input", () => {
