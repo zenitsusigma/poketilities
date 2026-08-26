@@ -2,6 +2,30 @@
 {% block title %}{{ site_name }} - Contact Us{% endblock %}
 
 {% block content %}
-<h1>Contact Us</h1>
-<!-- logic goes here next session -->
+<div class="contact-page">
+    <h1>Get in Touch</h1>
+    <p class="contact-intro">
+        {{ site_name }} is a solo project built by {{ my_name }} for Hack Club Macondo &mdash;
+        a Pok&eacute;mon-themed site with a handful of original mini-games, a real-time
+        multiplayer mode, and a completionist Pok&eacute;dex tracker, all built from scratch
+        with Flask.
+    </p>
+
+    <div class="contact-links">
+        <a class="contact-link" href="https://github.com/zenitsusigma/poketilities" target="_blank" rel="noopener">
+            <span class="contact-link-label">GitHub</span>
+            <span class="contact-link-value">View the source code</span>
+        </a>
+        <a class="contact-link" href="mailto:forgormyemail@gmail.com">
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-value">forgormyemail@gmail.com</span>
+        </a>
+        <a class="contact-link" href="https://hackclub.slack.com" target="_blank" rel="noopener">
+            <span class="contact-link-label">Slack</span>
+            <span class="contact-link-value">@willchecksoon</span>
+        </a>
+    </div>
+
+    <p class="contact-footer-note">Found a bug, or just want to talk Pok&eacute;mon? Reach out any of the ways above.</p>
+</div>
 {% endblock %}

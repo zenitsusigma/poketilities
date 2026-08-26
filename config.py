@@ -29,10 +29,34 @@ THEME = {
 
 FAVORITES = [
     {
-        "name": "Pikachu",
-        "image_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pikachu.png",
-        "blurb": "Pikachu is an Electric-type Pokémon known for its yellow fur and lightning bolt-shaped tail. It is the mascot of the Pokémon franchise and is loved by fans worldwide.",
-        "video_id": "aushdhsaduasdu"
+        "name": "Rayquaza",
+        "image_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/384.png",
+        "blurb": "Rayquaza is a Dragon/Flying-type Legendary that lives in the ozone layer, rarely coming down to the ground. As the mediator of Groudon and Kyogre's Gen 3 rivalry, it's one of the most iconic legendaries in the series, and can Mega Evolve without even needing a Mega Stone.",
+        "video_id": "NaE6N1_KO5M"
+    },
+    {
+        "name": "Lucario",
+        "image_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png",
+        "blurb": "Lucario is a Fighting/Steel-type that can sense the aura of any living thing, letting it read emotions and even see through solid objects. It shot to fame as the star of Pokémon: Lucario and the Mystery of Mew, and later became a Super Smash Bros. regular.",
+        "video_id": "CAIdBoYKrRo"
+    },
+    {
+        "name": "Greninja",
+        "image_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png",
+        "blurb": "Greninja is a Water/Dark-type ninja Pokémon, the final evolution of Froakie and Ash's signature partner through the Kalos region. Its water shuriken and blistering speed made Ash-Greninja one of the most memorable transformations in the anime.",
+        "video_id": "VaRldHkPR3A"
+    },
+    {
+        "name": "Infernape",
+        "image_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/392.png",
+        "blurb": "Infernape is a Fire/Fighting-type, the final form of Chimchar and Ash's Sinnoh ace. Modeled after the Monkey King Sun Wukong, it fights with a flame-crowned intensity that made it one of Ash's most beloved partners.",
+        "video_id": "CfnzJcxUnRg"
+    },
+    {
+        "name": "Decidueye",
+        "image_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/724.png",
+        "blurb": "Decidueye is a Grass/Ghost-type archer Pokémon, the final evolution of Rowlet. Precise, silent, and deadly with its arrow quills, it's one of the standout Alola starters and a fan-favorite design.",
+        "video_id": "UkhkSYE_ANQ"
     }
 ]
 
@@ -139,6 +163,12 @@ QUIZ_QUESTIONS = [
     {"question": "What ability prevents a Pokemon from being statused by weather-related conditions like Sandstorm damage?", "options": ["Sand Veil", "Sand Force", "Sand Rush", "Magic Guard"], "correct": 3},
     {"question": "Which region introduced the Fairy type?", "options": ["Sinnoh", "Unova", "Kalos", "Alola"], "correct": 2},
     {"question": "What happens to a move's power when it's super effective?", "options": ["x1.5", "x2", "x3", "No change"], "correct": 1},
+
+
+
+
+
+
 ]
 
 AKINATOR_POKEMON = [

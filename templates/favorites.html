@@ -3,11 +3,12 @@
 
 {% block content %}
 <h1>My Favorites</h1>
-<div>
+<p class="favorites-intro">A handful of Pokemon I'd pick as my team any day.</p>
+<div class="favorites-grid">
     {% for mon in favorites %}
         <article class="favorite-card">
             <h2>{{ mon.name }}</h2>
-            <img src="{{ mon.image_url }}" alt="{{ mon.name }}">
+            <img class="favorite-card-sprite" src="{{ mon.image_url }}" alt="{{ mon.name }}">
             <p>{{ mon.blurb}}</p>
             <div class="video-embed">
                 <iframe src="https://www.youtube.com/embed/{{ mon.video_id }}" allowfullscreen></iframe>

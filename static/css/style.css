@@ -195,6 +195,20 @@ main { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; }
     margin-bottom: 0.5rem;
 }
 
+.favorites-intro {
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.favorite-card-sprite {
+    width: 100%;
+    max-width: 140px;
+    display: block;
+    margin: 0 auto;
+    image-rendering: pixelated;
+}
+
 .favorites-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -358,6 +372,59 @@ footer {
 .error-text {
     color: #ff6b6b;
     text-align: center;
+}
+
+.contact-page {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact-intro {
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.contact-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-bg-alt);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: transform 0.12s ease, border-color 0.15s ease;
+}
+
+.contact-link:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+}
+
+.contact-link-label {
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.contact-link-value {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.contact-footer-note {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
 }
 
 .pokeball-spinner {
