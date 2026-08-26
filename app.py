@@ -597,6 +597,30 @@ def akinator_correct():
     session.pop("akinator", None)
     return jsonify({"ok": True})
 
+@app.route("/team-builder")
+def team_builder():
+    return render_template("team_builder.html", type_chart=TYPE_CHART, type_colors=TYPE_COLORS)
+
+@app.route("/api/team-builder/lookup")
+def team_builder_lookup():
+    name = normalize_pokemon_name(request.args.get("name", ""))
+    if not name:
+        return jsonify({"error": "Enter a Pokemon name."}), 400
+
+    response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{name}")
+    if response.status_code != 200:
+        return jsonify({"error": f'"{name}" isn\'t a Pokemon I recognize \u2014 check the spelling.'}), 404
+
+    data = response.json()
+    types = [t["type"]["name"] for t in data["types"]]
+    artwork = data["sprites"].get("other", {}).get("official-artwork", {}).get("front_default")
+
+    return jsonify({
+        "name": data["name"],
+        "types": types,
+        "sprite": artwork or data["sprites"].get("front_default"),
+    })
+
 @app.route("/multiplayer")
 def multiplayer_home():
     return render_template("multiplayer.html", generations=GENERATIONS)

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} - Team Builder{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/team-builder.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="tb-page">
+    <h1 class="tb-title">Team Builder</h1>
+    <p class="tb-subtitle">Build a team of up to 6, then see what types are dangerous against the whole squad.</p>
+
+    <form id="tb-add-form" class="tb-add-form">
+        <input type="text" id="tb-add-input" placeholder="Add a Pokemon by name..." autocomplete="off">
+        <button type="submit">
+            <span id="tb-add-text">Add</span>
+            <div class="pokeball-spinner pokeball-spinner--small" id="tb-add-spinner" style="display: none;"></div>
+        </button>
+    </form>
+    <p id="tb-error" class="tb-error"></p>
+
+    <div class="tb-team-grid" id="tb-team-grid"></div>
+
+    <div class="tb-coverage" id="tb-coverage" style="display: none;">
+        <h2>Team Type Coverage</h2>
+        <p class="tb-coverage-hint">Red = 3+ of your team is weak to this type. Green = 3+ resist or are immune to it.</p>
+        <div class="tb-coverage-grid" id="tb-coverage-grid"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const TYPE_CHART = {{ type_chart | tojson }};
+    const TYPE_COLORS = {{ type_colors | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/team-builder.js') }}"></script>
+{% endblock %}
