@@ -164,12 +164,6 @@ QUIZ_QUESTIONS = [
     {"question": "What ability prevents a Pokemon from being statused by weather-related conditions like Sandstorm damage?", "options": ["Sand Veil", "Sand Force", "Sand Rush", "Magic Guard"], "correct": 3},
     {"question": "Which region introduced the Fairy type?", "options": ["Sinnoh", "Unova", "Kalos", "Alola"], "correct": 2},
     {"question": "What happens to a move's power when it's super effective?", "options": ["x1.5", "x2", "x3", "No change"], "correct": 1},
-
-
-
-
-
-
 ]
 
 AKINATOR_POKEMON = [

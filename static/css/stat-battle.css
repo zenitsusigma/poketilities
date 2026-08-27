@@ -1,20 +1,34 @@
-.sd-page {
-    background: var(--color-bg-alt);
+.sb-page {
+    position: relative;
+    background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--radius);
+    box-shadow: 0 20px 50px -24px rgba(0, 0, 0, 0.55);
     padding: 2rem;
     max-width: 800px;
     margin: 0 auto;
     text-align: center;
 }
 
-.sd-subtitle {
+.sb-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    opacity: 0.6;
+}
+
+.sb-subtitle {
     color: var(--color-text-muted);
     margin-bottom: 1.25rem;
     font-size: 0.9rem;
 }
 
-.sd-score-row {
+.sb-score-row {
     display: flex;
     gap: 1.5rem;
     justify-content: center;
@@ -24,20 +38,20 @@
     margin-bottom: 1.25rem;
 }
 
-.sd-score-row span {
+.sb-score-row span {
     color: var(--color-primary);
     font-weight: 800;
     font-size: 1.1rem;
 }
 
-.sd-category {
+.sb-category {
     font-size: 1.3rem;
     font-weight: 800;
     margin-bottom: 1.25rem;
     min-height: 1.8rem;
 }
 
-.sd-arena {
+.sb-arena {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,13 +59,13 @@
     margin-bottom: 1rem;
 }
 
-.sd-vs {
+.sb-vs {
     font-weight: 800;
     color: var(--color-text-muted);
     font-size: 1.1rem;
 }
 
-.sd-card {
+.sb-card {
     flex: 1;
     max-width: 260px;
     display: flex;
@@ -66,51 +80,51 @@
     transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.sd-card:hover {
+.sb-card:hover {
     transform: translateY(-3px);
     border-color: var(--color-primary);
     box-shadow: 0 12px 28px -16px rgba(0,0,0,0.5);
 }
 
-.sd-card--correct {
+.sb-card--correct {
     border-color: #4ade80;
     background: rgba(74, 222, 128, 0.1);
 }
 
-.sd-card--wrong {
+.sb-card--wrong {
     border-color: #ff6169;
     background: rgba(255, 97, 105, 0.1);
     opacity: 0.7;
 }
 
-.sd-sprite {
+.sb-sprite {
     width: 120px;
     height: 120px;
     object-fit: contain;
 }
 
-.sd-name {
+.sb-name {
     font-weight: 700;
     text-transform: capitalize;
 }
 
-.sd-value {
+.sb-value {
     font-size: 1.4rem;
     font-weight: 800;
     color: var(--color-primary);
     min-height: 1.75rem;
 }
 
-.sd-feedback {
+.sb-feedback {
     min-height: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
 }
 
-.sd-feedback--good { color: #4ade80; }
-.sd-feedback--bad { color: #ff6169; }
+.sb-feedback--good { color: #4ade80; }
+.sb-feedback--bad { color: #ff6169; }
 
-.sd-btn {
+.sb-btn {
     padding: 0.65rem 1.4rem;
     border-radius: 999px;
     border: none;

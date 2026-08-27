@@ -1,11 +1,25 @@
 .pokedle-page {
-    background: var(--color-bg-alt);
+    position: relative;
+    background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--radius);
+    box-shadow: 0 20px 50px -24px rgba(0, 0, 0, 0.55);
     padding: 2rem;
     max-width: 800px;
     margin: 0 auto;
     text-align: center;
+}
+
+.pokedle-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    opacity: 0.6;
 }
 
 .pokedle-subtitle {
