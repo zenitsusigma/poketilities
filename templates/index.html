@@ -3,9 +3,63 @@
 
 {% block content %}
 <section class="hero">
-    <h1>Welcome to {{ site_name }}!</h1>
-    <h1>Hey I'm {{ my_name }}!</h1>
-    <p>{{ tagline }}</p>
-    <p>I'm just a normal dude, who *kinda* knows how to code and loves pokemon!</p>
+    <p class="hero-eyebrow">Welcome to</p>
+    <h1 class="hero-title">{{ site_name }}</h1>
+    <p class="hero-tagline">{{ tagline }}</p>
+    <p class="hero-intro">Hey, I'm {{ my_name }} &mdash; a normal dude who *kinda* knows how to code and loves Pokemon. This is a from-scratch Flask site with 8 original mini-games, a real-time multiplayer mode, and a completionist Pokedex tracker, built for Hack Club Macondo.</p>
+    <a href="{{ url_for('whos_that') }}" class="hero-cta">Start Playing</a>
+</section>
+
+<section class="feature-grid">
+    <a href="{{ url_for('whos_that') }}" class="feature-card">
+        <span class="feature-icon">&#128294;</span>
+        <h3>Who's That Pokemon?</h3>
+        <p>Guess the silhouette before it fully reveals. Lives, difficulty, Mega/Regional forms.</p>
+    </a>
+    <a href="{{ url_for('pokedle') }}" class="feature-card">
+        <span class="feature-icon">&#129513;</span>
+        <h3>Pokedle</h3>
+        <p>Wordle-style guessing &mdash; type, height, weight, and generation hints.</p>
+    </a>
+    <a href="{{ url_for('pokedex_game') }}" class="feature-card">
+        <span class="feature-icon">&#9876;&#65039;</span>
+        <h3>Stat Battle</h3>
+        <p>Two random Pokemon, one random stat. Guess which one's higher.</p>
+    </a>
+    <a href="{{ url_for('akinator') }}" class="feature-card">
+        <span class="feature-icon">&#128302;</span>
+        <h3>Akinator</h3>
+        <p>Think of a Pokemon. Answer a few questions and see if it can guess it.</p>
+    </a>
+    <a href="{{ url_for('pokedex_naming') }}" class="feature-card">
+        <span class="feature-icon">&#128218;</span>
+        <h3>Pokedex</h3>
+        <p>Name every Pokemon in a generation. Progress saves as you go.</p>
+    </a>
+    <a href="{{ url_for('team_builder') }}" class="feature-card">
+        <span class="feature-icon">&#128737;&#65039;</span>
+        <h3>Team Builder</h3>
+        <p>Build a team of 6 and see what types threaten the whole squad.</p>
+    </a>
+    <a href="{{ url_for('quiz') }}" class="feature-card">
+        <span class="feature-icon">&#129504;</span>
+        <h3>Quiz</h3>
+        <p>15 multiple-choice trivia questions, shuffled every run.</p>
+    </a>
+    <a href="{{ url_for('calculator') }}" class="feature-card">
+        <span class="feature-icon">&#128290;</span>
+        <h3>Calculator</h3>
+        <p>Pick 1 or 2 types, see every matchup instantly.</p>
+    </a>
+    <a href="{{ url_for('multiplayer_home') }}" class="feature-card">
+        <span class="feature-icon">&#128101;</span>
+        <h3>Multiplayer</h3>
+        <p>Create or join a room. Race friends to guess the same Pokemon.</p>
+    </a>
+    <a href="{{ url_for('favorites') }}" class="feature-card">
+        <span class="feature-icon">&#11088;</span>
+        <h3>Favorites</h3>
+        <p>My picks, with a bit about why each one made the cut.</p>
+    </a>
 </section>
 {% endblock %}
