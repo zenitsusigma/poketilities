@@ -14,6 +14,7 @@ NAV_LINKS = [
     ("Favorites", "favorites"),
     ("Contact", "contact"),
     ("Multiplayer", "multiplayer_home"),
+    ("Profile", "profile"),
 ]
 
 THEME = {

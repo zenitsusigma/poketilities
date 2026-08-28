@@ -1,0 +1,175 @@
+.pf-page {
+    position: relative;
+    background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    box-shadow: 0 20px 50px -24px rgba(0, 0, 0, 0.55);
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.pf-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    opacity: 0.6;
+}
+
+.pf-subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+
+.pf-stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.pf-stat-card {
+    background: var(--color-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.pf-stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+}
+
+.pf-stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.pf-stat-sub {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+}
+
+.pf-section {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.pf-section h2 {
+    font-size: 1rem;
+    color: var(--color-primary);
+    margin-bottom: 0.85rem;
+    text-align: center;
+}
+
+.pf-dex-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pf-dex-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 90px;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.pf-dex-gen {
+    font-weight: 700;
+    color: var(--color-text-muted);
+}
+
+.pf-dex-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-bg);
+    overflow: hidden;
+    }
+
+.pf-dex-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), #ff9f4d);
+    transition: width 0.3s ease;
+}
+
+.pf-dex-count {
+    text-align: right;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.pf-team-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.pf-team-member {
+    background: var(--color-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    width: 90px;
+}
+
+.pf-team-member img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.pf-team-member span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.pf-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.pf-list-item {
+    display: flex;
+    justify-content: space-between;
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.pf-empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.pf-empty a {
+    color: var(--color-primary);
+}

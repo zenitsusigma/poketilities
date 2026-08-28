@@ -621,6 +621,10 @@ def team_builder_lookup():
         "sprite": artwork or data["sprites"].get("front_default"),
     })
 
+@app.route("/profile")
+def profile():
+    return render_template("profile.html", generations=GENERATIONS)
+
 @app.route("/multiplayer")
 def multiplayer_home():
     return render_template("multiplayer.html", generations=GENERATIONS)

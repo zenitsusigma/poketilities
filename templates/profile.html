@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} - Profile{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="pf-page">
+    <h1 class="pf-title">Your Profile</h1>
+    <p class="pf-subtitle">Progress across every game on the site, all in one place.</p>
+
+    <div class="pf-stat-row">
+        <div class="pf-stat-card">
+            <span class="pf-stat-label">Who's That Pokemon</span>
+            <span class="pf-stat-value" id="pf-wt-streak">0</span>
+            <span class="pf-stat-sub">best streak</span>
+        </div>
+        <div class="pf-stat-card">
+            <span class="pf-stat-label">Stat Battle</span>
+            <span class="pf-stat-value" id="pf-sb-streak">0</span>
+            <span class="pf-stat-sub">best streak</span>
+        </div>
+        <div class="pf-stat-card">
+            <span class="pf-stat-label">Pokedex</span>
+            <span class="pf-stat-value" id="pf-dex-total">0</span>
+            <span class="pf-stat-sub">total named</span>
+        </div>
+    </div>
+
+    <section class="pf-section">
+        <h2>Pokedex Completion</h2>
+        <div class="pf-dex-list" id="pf-dex-list"></div>
+    </section>
+
+    <section class="pf-section">
+        <h2>Current Team</h2>
+        <div class="pf-team-row" id="pf-team-row"></div>
+    </section>
+
+    <section class="pf-section">
+        <h2>Your Local Who's That Pokemon Runs</h2>
+        <ul class="pf-list" id="pf-local-runs"></ul>
+    </section>
+
+    <section class="pf-section">
+        <h2>Global Leaderboard</h2>
+        <ul class="pf-list" id="pf-global-board"></ul>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const GEN_RANGES = {{ generations | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
