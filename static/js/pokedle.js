@@ -18,7 +18,7 @@ function capitalize(str) {
 
 function typeCellHTML(typeResult) {
     if (!typeResult.value) {
-        return `<span class="pokedle-cell pokedle-cell--empty">&mdash;</span>`;
+        return `<span class="pokedle-cell pokedle-cell--empty">-</span>`;
     }
     const color = TYPE_COLORS[typeResult.value] || "#888";
     return `<span class="pokedle-cell pokedle-cell--type pokedle-cell--${typeResult.status}" style="--type-color: ${color}">${typeResult.value}</span>`;

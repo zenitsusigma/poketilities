@@ -61,7 +61,7 @@ if (localRuns.length === 0) {
         const li = document.createElement("li");
         li.className = "pf-list-item";
         const date = new Date(run.at).toLocaleDateString();
-        li.innerHTML = `<span>#${i + 1} &mdash; ${run.score} pts</span><span>${date}</span>`;
+        li.innerHTML = `<span>#${i + 1} - ${run.score} pts</span><span>${date}</span>`;
         localRunsEl.appendChild(li);
     });
 }

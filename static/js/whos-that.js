@@ -115,6 +115,24 @@ function renderGuess() {
         .join("");
 }
 
+function renderHint() {
+    if (!currentAnswer) return;
+
+    if (difficulty === "hard") {
+        if (hintEl) hintEl.textContent = "";
+        return;
+    }
+
+    const chars = currentAnswer.split("").map((ch, i) => {
+        if (i < revealedHintChars) return ch.toUpperCase();
+        return "_";
+    });
+
+    if (hintEl) {
+        hintEl.textContent = chars.join(" ");
+    }
+}
+
 function shakeDisplay() {
     guessDisplay.classList.remove("wt-shake");
     void guessDisplay.offsetWidth; // restart the animation even on repeated wrong guesses
@@ -227,18 +245,6 @@ document.addEventListener("keydown", (e) => {
         togglePause();
     }
 });
-
-function togglePause() {
-    if (roundOver) return;
-    isPaused = !isPaused;
-    pauseOverlay.style.display = isPaused ? "flex" : "none";
-    if (isPaused) {
-        pauseTimerVisuals();
-    } else {
-        resumeTimerVisuals();
-        focusInput();
-    }
-}
 
 function togglePause() {
     if (roundOver) return;
@@ -389,7 +395,7 @@ async function renderGlobalLeaderboard() {
         const rows = await response.json();
 
         if (rows.length === 0) {
-            globalLeaderboardList.innerHTML = '<li class="wt-history-empty">No runs submitted yet &mdash; be the first!</li>';
+            globalLeaderboardList.innerHTML = '<li class="wt-history-empty">No runs submitted yet - be the first!</li>';
             return;
         }
 
@@ -480,7 +486,7 @@ function endRound(won) {
 
 function gameOverSequence() {
     saveLocalLeaderboardEntry(score);
-    feedback.innerHTML = `Run over &mdash; final score <strong>${score}</strong>. Press Enter or hit Play Again.`;
+    feedback.innerHTML = `Run over - final score <strong>${score}</strong>. Press Enter or hit Play Again.`;
     feedback.className = "wt-feedback wt-feedback--bad";
     playAgainBtn.style.display = "inline-block";
 
