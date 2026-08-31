@@ -110,7 +110,7 @@ def test_akinator_best_question_never_picks_a_useless_split():
 
 def test_akinator_converges_to_correct_guess():
     """Plays a full game against every Pokemon in the pool. Matches the
-    ~89% first-guess accuracy verified during development — remaining
+    ~89% first-guess accuracy verified during development - remaining
     misses are between genuinely similar Pokemon (Mew/Mewtwo, etc)."""
     correct = 0
     for target in AKINATOR_POKEMON:

@@ -10,6 +10,7 @@ NAV_LINKS = [
     ("Akinator", "akinator"),
     ("Pokedex", "pokedex_naming"),
     ("Team Builder", "team_builder"),
+    ("Memory Match", "memory_match"),
     ("Quiz", "quiz"),
     ("Favorites", "favorites"),
     ("Contact", "contact"),
@@ -93,7 +94,7 @@ MEGA_EVOLUTIONS = [
     "rayquaza-mega", "sableye-mega", "sharpedo-mega", "camerupt-mega",
     "altaria-mega", "glalie-mega", "diancie-mega",
 
-    # New in Pokemon Legends Z-A (Oct 2025) — 23 of the 26, see chat note
+    # New in Pokemon Legends Z-A (Oct 2025) - 23 of the 26, see chat note
     # on why Zygarde and Eternal Floette are left out for now
     "barbaracle-mega", "chandelure-mega", "chesnaught-mega", "clefable-mega",
     "delphox-mega", "dragalge-mega", "dragonite-mega", "drampa-mega",

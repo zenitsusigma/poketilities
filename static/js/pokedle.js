@@ -58,7 +58,7 @@ guessForm.addEventListener("submit", async (e) => {
 
     errorEl.textContent = "";
 
-    // Check for a repeat guess before even hitting the network — cheaper,
+    // Check for a repeat guess before even hitting the network - cheaper,
     // faster feedback, and stops you from wasting a look-up on a name
     // you've already tried this round.
     const normalizedGuess = guess.toLowerCase();

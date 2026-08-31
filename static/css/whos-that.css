@@ -1,5 +1,5 @@
 /*
-  Who's That Pokemon? — modern UI that follows the SITE'S theme toggle
+  Who's That Pokemon? - modern UI that follows the SITE'S theme toggle
   (the sun/moon button in the header), rather than having its own.
   Reacts to the same [data-theme] attribute main.js already sets on
   <html>, so switching theme anywhere on the site switches this page too.

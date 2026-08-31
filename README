@@ -1,0 +1,62 @@
+# Poketilities
+
+A Pokemon-themed hub of original mini-games and tools, built from scratch with Flask for Hack Club Macondo.
+
+## Why I made this
+
+I made this because I wanted to make something fun to play with my friends because there are not that many fun Pokemon games to play in class or anywhere really. It's pretty fun to play most of these games.
+
+## What it does
+
+- **Who's That Pokemon?** - you try to guess the pokemon based on the silhouette, I also added difficulty modes, generation, mega and regional filters, lives, hints and both a local and a global leaderboard!!!
+- **Pokedle** - this is like a wordle style pokemon guesser based on Squirdle, and there's different details like type, generation, height and weight which all give hints towards the answer which is hidden server-side so it can't be read from netowrk tab of dev tools.
+- **Stat Battle** - so basically this is testing your pokemon ball, where there are 2 random pokemon and a random stat and you have to guess which one is higher.
+- **Akinator** - you think of a pokemon, and it asks you yes/no questions to try and guess your pokemon - please note that this is just a demo and it does not do that many things.
+- **Pokedex** - you can click any numbered slot to reveal a sprite and you have to name it. Correct guesses stay filled in permanently so you can track dex completion generation by generation.
+- **Team Builder** - you can build a team of up to 6 pokemen and then you can see the coverage of your team.
+- **Memory Match** - this is basically memory match with some difficulty tiers.
+- **Quiz** - it's just some good old pokemon trivia with shuffled questions.
+- **Type Calculator** - you ca pick 1-2 types and you see the type interactions.
+- **Multiplayer** - you can make or join a room with a shareable code and everyone races to guess the exact same pokemon in real-time
+- **Profile Dashboard** - this aggregates your progress across every game in one place.
+- **Favorites** - my personal picks and their pokdex stuff.
+
+## Tech stack
+
+- **Backend:** Python, Flask, Flask-SocketIO for real-time multiplayer
+- **Database:** SQLite (global leaderboard)
+- **Frontend:** Vanilla HTML/CSS/JS, no framework
+- **External API:** [PokeAPI](https://pokeapi.co) for all Pokemon data and sprites
+- **Testing:** pytest (`test_app.py`)
+
+## How to run it
+
+1. Install Python 3.10+
+2. Clone this repo and install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Run it:
+   ```bash
+   python app.py
+   ```
+4. Open `http://localhost:5000`
+
+To run the testing suite:
+```bash
+python -m pytest test_app.py -v
+```
+
+**Live demo:** https://poketilities.arhamn.hackclub.app
+
+## Screenshots
+
+[Add 3–4 screenshots here - the homepage, Who's That Pokemon mid-game, and one or two others that show off the range of what's built. This is a real Macondo README requirement, not optional at Level 2+.]
+
+## What I'd do differently
+
+I'd probably add more features and refine and optimise my games. I would also make the website more aesthetic and stuff because rn its pretty ugly. I feel like all the games on this site have so much potential I just didnt have enough time to develop them into something which is truly cool. FOr example, I could probably make the pokemon Akinator way, way better than what it is right now as it only has some ultra-popular pokemon. I'll probably continue development of this in another ysws.
+
+## License
+
+MIT - see [LICENSE](LICENSE).

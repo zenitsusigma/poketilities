@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }} - Memory Match{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/memory.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="mm-page">
+    <h1 class="mm-title">Memory Match</h1>
+    <p class="mm-subtitle">Flip two cards, find the pair. Clear the board in as few moves as you can.</p>
+
+    <div class="mm-controls">
+        <div class="mm-diffrow" id="mm-diffrow">
+            <button type="button" class="gen-btn active" data-pairs="6">Easy (6 pairs)</button>
+            <button type="button" class="gen-btn" data-pairs="8">Normal (8 pairs)</button>
+            <button type="button" class="gen-btn" data-pairs="10">Hard (10 pairs)</button>
+        </div>
+        <div class="gen-select" id="gen-select">
+            {% for gen_key in generations.keys() %}
+                <button type="button" class="gen-btn {{ 'active' if gen_key == '1' else '' }}" data-gen="{{ gen_key }}">Gen {{ gen_key }}</button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mm-score-row">
+        <p>Moves <span id="mm-moves">0</span></p>
+        <p>Time <span id="mm-time">0:00</span></p>
+        <p>Best <span id="mm-best">&mdash;</span></p>
+    </div>
+
+    <div class="mm-board" id="mm-board">
+        <div class="pokeball-spinner" id="mm-loading"></div>
+    </div>
+
+    <p class="mm-win-message" id="mm-win-message" style="display: none;"></p>
+    <button type="button" id="mm-new-game-btn" class="mm-btn">New Game</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/memory.js') }}"></script>
+{% endblock %}

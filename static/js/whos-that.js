@@ -206,7 +206,7 @@ hiddenInput.addEventListener("keydown", (e) => {
 
     if (isPaused) return;
 
-    // Ctrl+Delete (or Ctrl+Backspace — browsers differ) clears the whole guess at once
+    // Ctrl+Delete (or Ctrl+Backspace - browsers differ) clears the whole guess at once
     if (e.ctrlKey && (e.key === "Delete" || e.key === "Backspace")) {
         e.preventDefault();
         hiddenInput.value = "";
@@ -345,8 +345,8 @@ function renderHistory() {
     fullHistoryList.innerHTML = "";
 
     if (guessHistory.length === 0) {
-        historyList.innerHTML = '<li class="wt-history-empty">No guesses yet — go catch one!</li>';
-        fullHistoryList.innerHTML = '<li class="wt-history-empty">No guesses yet — go catch one!</li>';
+        historyList.innerHTML = '<li class="wt-history-empty">No guesses yet - go catch one!</li>';
+        fullHistoryList.innerHTML = '<li class="wt-history-empty">No guesses yet - go catch one!</li>';
         return;
     }
 
@@ -375,7 +375,7 @@ function renderLeaderboard() {
         const li = document.createElement("li");
         li.className = "wt-history-item";
         const date = new Date(entry.at).toLocaleDateString();
-        li.innerHTML = `<span>#${i + 1} — ${entry.score} pts</span><span>${date}</span>`;
+        li.innerHTML = `<span>#${i + 1} - ${entry.score} pts</span><span>${date}</span>`;
         leaderboardList.appendChild(li);
     });
 }
@@ -536,7 +536,7 @@ async function loadNewPokemon() {
         data = await response.json();
     } catch (err) {
         if (myToken !== requestToken) return;
-        loadingIndicator.textContent = "COULDN'T REACH POKEAPI — TRY AGAIN";
+        loadingIndicator.textContent = "COULDN'T REACH POKEAPI - TRY AGAIN";
         return;
     }
 

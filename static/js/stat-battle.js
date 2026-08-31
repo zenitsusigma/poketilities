@@ -69,7 +69,7 @@ async function startRound() {
     rightName.textContent = capitalize(data.right.name);
 
     // Spinner stays up on each side until that specific image has actually
-    // finished downloading, not just until the API response arrives —
+    // finished downloading, not just until the API response arrives -
     // the sprite fetch is a separate, often slower, network round-trip.
     leftSprite.onload = () => {
         leftSpinner.style.display = "none";

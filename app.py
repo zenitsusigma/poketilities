@@ -217,7 +217,7 @@ def pokedex_game_round():
 
     left_data = fetch_random_pokemon(selected_keys)
     right_data = fetch_random_pokemon(selected_keys)
-    # Avoid a Pokemon facing itself — just re-roll the right side once, good enough odds-wise
+    # Avoid a Pokemon facing itself - just re-roll the right side once, good enough odds-wise
     if right_data["id"] == left_data["id"]:
         right_data = fetch_random_pokemon(selected_keys)
 
@@ -308,7 +308,7 @@ def random_pokemon():
     if want_regional:
         extra_pool += REGIONAL_FORMS
 
-    # Extra pool gets a fair shot without swamping the normal dex picks —
+    # Extra pool gets a fair shot without swamping the normal dex picks -
     # capped at 35% so most rounds still come from the selected generations.
     use_extra = bool(extra_pool) and random.random() < min(0.35, len(extra_pool) / 300)
     lookup = random.choice(extra_pool) if use_extra else None
@@ -320,7 +320,7 @@ def random_pokemon():
 
     response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{lookup}")
     if response.status_code != 200:
-        # A form name typo'd or PokeAPI hiccuped — fall back to a normal dex pick
+        # A form name typo'd or PokeAPI hiccuped - fall back to a normal dex pick
         gen_key = random.choice(selected_keys)
         start, end = GENERATIONS[gen_key]
         lookup = random.randint(start, end)
@@ -562,7 +562,7 @@ def akinator_answer():
         target_value = answer == "yes"
         filtered = [c for c in candidates if akinator_matches(c, attr_key) == target_value]
         state["candidates"] = [c["name"] for c in filtered]
-    # "unsure" — don't filter, just stop asking this question again
+    # "unsure" - don't filter, just stop asking this question again
 
     state["asked"].append(attr_key)
     state["question_count"] += 1
@@ -624,6 +624,39 @@ def team_builder_lookup():
 @app.route("/profile")
 def profile():
     return render_template("profile.html", generations=GENERATIONS)
+
+@app.route("/memory")
+def memory_match():
+    return render_template("memory.html", generations=GENERATIONS)
+
+@app.route("/api/memory/deal")
+def memory_deal():
+    pairs = request.args.get("pairs", type=int, default=8)
+    pairs = max(4, min(pairs, 12))
+
+    selected = request.args.get("gens", "")
+    selected_keys = [g for g in selected.split(",") if g in GENERATIONS] or list(GENERATIONS.keys())
+
+    chosen_ids = set()
+    cards = []
+    attempts = 0
+    while len(cards) < pairs and attempts < pairs * 10:
+        attempts += 1
+        gen_key = random.choice(selected_keys)
+        start, end = GENERATIONS[gen_key]
+        pid = random.randint(start, end)
+        if pid in chosen_ids:
+            continue
+        chosen_ids.add(pid)
+
+        response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pid}")
+        if response.status_code != 200:
+            continue
+        data = response.json()
+        artwork = data["sprites"].get("other", {}).get("official-artwork", {}).get("front_default")
+        cards.append({"name": data["name"], "sprite": artwork or data["sprites"].get("front_default")})
+
+    return jsonify({"cards": cards})
 
 @app.route("/multiplayer")
 def multiplayer_home():
