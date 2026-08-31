@@ -51,7 +51,12 @@ python -m pytest test_app.py -v
 
 ## Screenshots
 
-[Add 3–4 screenshots here - the homepage, Who's That Pokemon mid-game, and one or two others that show off the range of what's built. This is a real Macondo README requirement, not optional at Level 2+.]
+<img width="3000" height="1920" alt="image" src="https://github.com/user-attachments/assets/f67ce0ba-2c3f-4224-b501-5e68b832a14a" />
+
+<img width="3000" height="2000" alt="image" src="https://github.com/user-attachments/assets/89bcd626-d8ef-4af5-b222-77470d46f1ff" />
+
+<img width="3000" height="2000" alt="image" src="https://github.com/user-attachments/assets/1c5cd860-421c-467b-afd2-e91114b66c98" />
+
 
 ## What I'd do differently
 
