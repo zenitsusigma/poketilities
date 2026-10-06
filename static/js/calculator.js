@@ -24,7 +24,7 @@ function buildTypeButton(type, onclick) {
     return btn;
 }
 
-Objects.keys(TYPE_COLORS).forEach((type) => {
+Object.keys(TYPE_COLORS).forEach((type) => {
     type1Grid.appendChild(buildTypeButton(type, selectType1));
     type2Grid.appendChild(buildTypeButton(type, selectType2))
 });

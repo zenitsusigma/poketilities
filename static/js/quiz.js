@@ -93,6 +93,16 @@ function showResults() {
     finalMessageEl.textContent = message;
 }
 
+function startQuiz() {
+    order = shuffledIndexes(QUIZ_QUESTIONS.length);
+    currentIndex = 0;
+    score = 0;
+    introEl.style.display = "none";
+    resultsEl.style.display = "none";
+    activeEl.style.display = "block";
+    showQuestion();
+}
+
 startBtn.addEventListener("click", startQuiz);
 nextBtn.addEventListener("click", nextQuestion);
 restartBtn.addEventListener("click", startQuiz);
