@@ -66,6 +66,7 @@
 }
 
 .sb-card {
+    color: var(--color-text-muted);
     flex: 1;
     max-width: 260px;
     display: flex;

@@ -14,10 +14,10 @@ const groups = {
 let type1 = null;
 let type2 = null;
 
-function buildTypeButton(type, onclick) {
+function buildTypeButton(type, onClick) {
     const btn = document.createElement("button")
     btn.type = "button";
-    btn.className = "calc-tyoe-btn";
+    btn.className = "calc-type-btn";
     btn.textContent = type;
     btn.style.setProperty("--type-color", TYPE_COLORS[type]);
     btn.addEventListener("click", () => onClick(type, btn));
